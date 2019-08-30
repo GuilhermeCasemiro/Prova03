@@ -9,10 +9,12 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import br.com.contmatic.enums.DDD;
 import br.com.contmatic.fixtures.Fixtures;
 import br.com.contmatic.models.Endereco;
 import br.com.six2six.fixturefactory.Fixture;
@@ -22,7 +24,7 @@ import br.com.six2six.fixturefactory.Fixture;
  * The Class EnderecoTest.
  */
 public class EnderecoTest {
-    
+
     /**
      * Sets the up.
      */
@@ -148,9 +150,14 @@ public class EnderecoTest {
         assertThat(Endereco.class, hasValidBeanHashCode());
     }
 
-    // @Test
-    // public void deve_respeitar_o_toString() {
-    // assertThat(Endereco.class, hasValidBeanToString());
-    // }
+    /**
+     * Deve respeitar o to string.
+     */
+    @Test
+    public void deve_respeitar_o_toString() {
+        Endereco endereco = Fixture.from(Endereco.class).gimme("EnderecoFixture");
+        endereco.setUf(DDD.SAO_PAULO);
+        assertTrue(endereco.toString().contains("SAO_PAULO"));
+    }
 
 }

@@ -155,9 +155,13 @@ public class PessoaFisicaTest {
         assertThat(PessoaFisica.class, hasValidBeanConstructor());
     }
 
-    // @Test
-    // public void deve_aceitar_as_regras_do_toString() {
-    // assertThat(PessoaFisica.class, hasValidBeanToString());
-    // }
+    /**
+     * Deve aceitar as regras do to string.
+     */
+    @Test
+    public void deve_aceitar_as_regras_do_toString() {
+        PessoaFisica pfFsica = Fixture.from(PessoaFisica.class).gimme("PFisicaFixtureMasculino");
+        assertTrue(pfFsica.toString().contains("Masculino"));
+    }
 
 }

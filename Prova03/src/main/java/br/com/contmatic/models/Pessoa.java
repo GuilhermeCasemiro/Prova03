@@ -26,13 +26,13 @@ public class Pessoa {
 
     /** The nome. */
     private String nome;
-    
+
     /** The email. */
     private String email;
-    
+
     /** The endereco. */
     private Set<Endereco> endereco;
-    
+
     /** The contatos. */
     private Set<Contato> contatos;
 
@@ -190,7 +190,9 @@ public class Pessoa {
         return true;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -198,7 +200,9 @@ public class Pessoa {
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -207,13 +211,15 @@ public class Pessoa {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
 
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
 
     }
 
