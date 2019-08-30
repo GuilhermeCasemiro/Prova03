@@ -24,7 +24,7 @@ import br.com.six2six.fixturefactory.Fixture;
  * The Class PessoaTest.
  */
 public class PessoaTest {
-    
+
     /**
      * Sets the up.
      */
@@ -122,6 +122,7 @@ public class PessoaTest {
     @Test(expected = NullPointerException.class)
     public void deve_dar_erro_se_o_contato_for_nulo() {
         Pessoa pessoa = Fixture.from(Pessoa.class).gimme("PessoaFixture");
+        System.out.println(pessoa);
         assertNull(pessoa.acicionarContato(null));
     }
 
@@ -149,8 +150,12 @@ public class PessoaTest {
         assertThat(Pessoa.class, hasValidGettersAndSetters());
     }
 
-//     @Test
-//     public void deve_respeitar_o_toString() {
-//     assertThat(Pessoa.class, hasValidBeanToString());
-//     }
+    /**
+     * Deve respeitar o to string.
+     */
+    @Test
+    public void deve_respeitar_o_toString() {
+        Pessoa pessoa = Fixture.from(Pessoa.class).gimme("PessoaFixture");
+        assertTrue(pessoa.toString().contains("contmatic"));
+    }
 }

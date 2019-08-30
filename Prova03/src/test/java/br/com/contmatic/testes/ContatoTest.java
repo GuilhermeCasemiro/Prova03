@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import br.com.contmatic.enums.Telefone;
 import br.com.contmatic.fixtures.Fixtures;
 import br.com.contmatic.models.Contato;
 import br.com.six2six.fixturefactory.Fixture;
@@ -117,9 +118,14 @@ public class ContatoTest {
         assertThat(Contato.class, hasValidBeanHashCode());
     }
 
-    // @Test
-    // public void deve_respeitar_o_toString() {
-    // assertThat(Contato.class, hasValidBeanToString());
-    // }
+    /**
+     * Deve respeitar o to string.
+     */
+    @Test
+    public void deve_respeitar_o_toString() {
+        Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
+        contato.setTelefone(Telefone.FIXO);
+        assertTrue(contato.toString().contains("FIXO"));
+    }
 
 }

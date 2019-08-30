@@ -108,8 +108,13 @@ public class PessoaJuridicaTest {
         assertThat(PessoaJuridica.class, hasValidBeanConstructor());
     }
 
-    // @Test
-    // public void deve_aceitar_as_regras_do_toString() {
-    // assertThat(PessoaJuridica.class, hasValidBeanToString());
-    // }
+    /**
+     * Deve aceitar as regras do to string.
+     */
+    @Test
+    public void deve_aceitar_as_regras_do_toString() {
+        PessoaJuridica pJuridica = Fixture.from(PessoaJuridica.class).gimme("PJuridicaFixture");
+        pJuridica.setCnpj("34755982000143");
+        assertTrue(pJuridica.toString().contains("34755982000143"));
+    }
 }
