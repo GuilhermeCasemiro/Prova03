@@ -11,6 +11,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Random;
+
 import org.joda.time.DateTime;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -41,29 +43,7 @@ public class PessoaFisicaTest {
     public void gerarData() {
         registerValueGenerator(new ValueGenerator<DateTime>() {
             public DateTime generate() {
-                return DateTime.now();
-            }
-        }, DateTime.class);
-    }
-
-    /**
-     * Gerar data equals.
-     */
-    public void gerarDataEquals() {
-        registerValueGenerator(new ValueGenerator<DateTime>() {
-            public DateTime generate() {
-                return DateTime.now().plusHours(2);
-            }
-        }, DateTime.class);
-    }
-
-    /**
-     * Gerar data hash code.
-     */
-    public void gerarDataHashCode() {
-        registerValueGenerator(new ValueGenerator<DateTime>() {
-            public DateTime generate() {
-                return DateTime.now().plusHours(2);
+                return new DateTime(new Random().nextLong()).withMillisOfSecond(0);
             }
         }, DateTime.class);
     }
@@ -154,7 +134,7 @@ public class PessoaFisicaTest {
      */
     @Test
     public void deve_aceitar_as_regras_do_equals() {
-        gerarDataEquals();
+        gerarData();
         assertThat(PessoaFisica.class, hasValidBeanEquals());
     }
 
@@ -163,7 +143,7 @@ public class PessoaFisicaTest {
      */
     @Test
     public void deve_aceitar_as_regras_do_hashcode() {
-        gerarDataHashCode();
+        gerarData();
         assertThat(PessoaFisica.class, hasValidBeanHashCode());
     }
 

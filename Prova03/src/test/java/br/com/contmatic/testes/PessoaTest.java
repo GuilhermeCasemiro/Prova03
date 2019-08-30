@@ -149,8 +149,8 @@ public class PessoaTest {
         assertThat(Pessoa.class, hasValidGettersAndSetters());
     }
 
-    // @Test
-    // public void deve_respeitar_o_toString() {
-    // assertThat(Pessoa.class, hasValidBeanToString());
-    // }
+//     @Test
+//     public void deve_respeitar_o_toString() {
+//     assertThat(Pessoa.class, hasValidBeanToString());
+//     }
 }
