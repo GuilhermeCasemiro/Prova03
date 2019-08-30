@@ -1,0 +1,15 @@
+br\com\contmatic\enums\Telefone.class
+br\com\contmatic\fixtures\Fixtures$6.class
+br\com\contmatic\models\Contato.class
+br\com\contmatic\fixtures\Fixtures$5.class
+br\com\contmatic\fixtures\Fixtures$1.class
+br\com\contmatic\models\PessoaJuridica.class
+br\com\contmatic\fixtures\Fixtures$4.class
+br\com\contmatic\models\Pessoa.class
+br\com\contmatic\fixtures\Fixtures.class
+br\com\contmatic\enums\DDD.class
+br\com\contmatic\fixtures\Fixtures$3.class
+br\com\contmatic\models\PessoaFisica.class
+br\com\contmatic\fixtures\Fixtures$7.class
+br\com\contmatic\fixtures\Fixtures$2.class
+br\com\contmatic\models\Endereco.class
