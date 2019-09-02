@@ -6,10 +6,10 @@ import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 import br.com.contmatic.enums.DDD;
 
@@ -18,16 +18,16 @@ import br.com.contmatic.enums.DDD;
  * The Class Endereco.
  */
 public class Endereco {
-    
+
     /** The bairro. */
     private String bairro;
-    
+
     /** The uf. */
     private DDD uf;
-    
+
     /** The cep. */
     private String cep;
-    
+
     /** The complemento. */
     private String complemento;
 
@@ -133,7 +133,9 @@ public class Endereco {
         this.cep = cep;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -141,7 +143,9 @@ public class Endereco {
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -149,12 +153,14 @@ public class Endereco {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
     }
 
 }

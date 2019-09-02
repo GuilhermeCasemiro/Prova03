@@ -3,10 +3,10 @@ package br.com.contmatic.models;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.hibernate.validator.constraints.Length;
 
 import br.com.contmatic.enums.DDD;
@@ -20,7 +20,7 @@ public class Contato {
 
     /** The telefone. */
     Telefone telefone;
-    
+
     /** The ddd. */
     DDD ddd;
 
@@ -83,7 +83,9 @@ public class Contato {
         this.ddd = ddd;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -91,7 +93,9 @@ public class Contato {
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -99,12 +103,14 @@ public class Contato {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
     }
 
 }

@@ -3,10 +3,10 @@ package br.com.contmatic.models;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.hibernate.validator.constraints.br.CPF;
 import org.joda.time.DateTime;
 
@@ -18,10 +18,10 @@ public class PessoaFisica extends Pessoa {
 
     /** The cpf. */
     private String cpf;
-    
+
     /** The sexo. */
     private String sexo;
-    
+
     /** The data nascimento. */
     private DateTime dataNascimento;
 
@@ -106,7 +106,9 @@ public class PessoaFisica extends Pessoa {
         this.sexo = sexo;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see br.com.contmatic.models.Pessoa#hashCode()
      */
     @Override
@@ -114,7 +116,9 @@ public class PessoaFisica extends Pessoa {
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see br.com.contmatic.models.Pessoa#equals(java.lang.Object)
      */
     @Override
@@ -122,13 +126,15 @@ public class PessoaFisica extends Pessoa {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see br.com.contmatic.models.Pessoa#toString()
      */
     @Override
     public String toString() {
 
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
     }
 
 }
