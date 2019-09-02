@@ -3,10 +3,10 @@ package br.com.contmatic.models;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 import br.com.caelum.stella.bean.validation.CNPJ;
 
@@ -15,10 +15,10 @@ import br.com.caelum.stella.bean.validation.CNPJ;
  * The Class PessoaJuridica.
  */
 public class PessoaJuridica extends Pessoa {
-    
+
     /** The cnpj. */
     private String cnpj;
-    
+
     /** The razao social. */
     private String razaoSocial;
 
@@ -82,7 +82,9 @@ public class PessoaJuridica extends Pessoa {
         this.razaoSocial = razaoSocial;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see br.com.contmatic.models.Pessoa#hashCode()
      */
     @Override
@@ -90,7 +92,9 @@ public class PessoaJuridica extends Pessoa {
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see br.com.contmatic.models.Pessoa#equals(java.lang.Object)
      */
     @Override
@@ -98,12 +102,14 @@ public class PessoaJuridica extends Pessoa {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see br.com.contmatic.models.Pessoa#toString()
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE).append("Razão Social: ", razaoSocial).append("CNPJ: ", cnpj).toString();
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
     }
 
 }
