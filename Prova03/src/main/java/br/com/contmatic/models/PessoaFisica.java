@@ -1,6 +1,7 @@
 package br.com.contmatic.models;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -17,12 +18,19 @@ import org.joda.time.DateTime;
 public class PessoaFisica extends Pessoa {
 
     /** The cpf. */
+    @NotNull(message = "CPF obrigatório.")
+    @CPF
+    @Size(min = 11, max = 11)
     private String cpf;
 
     /** The sexo. */
+    @NotNull(message = "Sexo obrigatório.")
+    @Size(min = 8, max = 9)
     private String sexo;
 
     /** The data nascimento. */
+    @NotNull(message = "A data de nascimento não pode ser nula.")
+    @Past
     private DateTime dataNascimento;
 
     /**
@@ -51,7 +59,6 @@ public class PessoaFisica extends Pessoa {
      *
      * @return the data nascimento
      */
-    @NotNull(message = "A data de nascimento não pode ser nula.")
     public DateTime getDataNascimento() {
         return dataNascimento;
     }
@@ -70,9 +77,6 @@ public class PessoaFisica extends Pessoa {
      *
      * @return the cpf
      */
-    @NotNull(message = "CPF obrigatório.")
-    @CPF
-    @Size(min = 11, max = 11)
     public String getCpf() {
         return cpf;
     }
@@ -91,8 +95,6 @@ public class PessoaFisica extends Pessoa {
      *
      * @return the sexo
      */
-    @NotNull(message = "Sexo obrigatório.")
-    @Size(min = 8, max = 9)
     public String getSexo() {
         return sexo;
     }

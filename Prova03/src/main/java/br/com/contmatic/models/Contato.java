@@ -19,9 +19,13 @@ import br.com.contmatic.enums.Telefone;
 public class Contato {
 
     /** The telefone. */
+    @Valid
+    @Max(9)
     Telefone telefone;
 
     /** The ddd. */
+    @Valid
+    @Length(min = 2, max = 2)
     DDD ddd;
 
     /**
@@ -48,8 +52,6 @@ public class Contato {
      *
      * @return the telefone
      */
-    @Valid
-    @Max(9)
     public Telefone getTelefone() {
         return telefone;
     }
@@ -68,8 +70,6 @@ public class Contato {
      *
      * @return the ddd
      */
-    @Valid
-    @Length(min = 2, max = 2)
     public DDD getDdd() {
         return ddd;
     }

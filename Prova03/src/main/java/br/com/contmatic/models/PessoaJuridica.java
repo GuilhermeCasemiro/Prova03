@@ -17,9 +17,14 @@ import br.com.caelum.stella.bean.validation.CNPJ;
 public class PessoaJuridica extends Pessoa {
 
     /** The cnpj. */
+    @NotBlank(message = "CNPJ obrigatório")
+    @CNPJ
+    @Size(min = 14, max = 14)
     private String cnpj;
 
     /** The razao social. */
+    @NotBlank(message = "Razão Social é obrigatório")
+    @Size(min = 10, max = 30)
     private String razaoSocial;
 
     /**
@@ -46,9 +51,6 @@ public class PessoaJuridica extends Pessoa {
      *
      * @return the cnpj
      */
-    @NotBlank(message = "CNPJ obrigatório")
-    @CNPJ
-    @Size(min = 14, max = 14)
     public String getCnpj() {
         return cnpj;
     }
@@ -67,8 +69,6 @@ public class PessoaJuridica extends Pessoa {
      *
      * @return the razao social
      */
-    @NotBlank(message = "Razão Social é obrigatório")
-    @Size(min = 10, max = 30)
     public String getRazaoSocial() {
         return razaoSocial;
     }

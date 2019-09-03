@@ -3,8 +3,11 @@ package br.com.contmatic.testes;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEquals;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCode;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -46,7 +49,7 @@ public class ContatoTest {
     @Test
     public void nao_deve_aceitar_telefone_fixo_com_mais_de_8_digitos() {
         Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
-        assertThat(contato.getTelefone().getTamanho(), is(not((9))));
+        assertThat(contato.getTelefone().getTamanho(), is(not(greaterThan((9)))));
     }
 
     /**
@@ -55,7 +58,7 @@ public class ContatoTest {
     @Test
     public void nao_deve_aceitar_telefone_celular_com_mais_de_9_digitos() {
         Contato contato = Fixture.from(Contato.class).gimme("ContatoCelularFixture");
-        assertThat(contato.getTelefone().getTamanho(), is(not((10))));
+        assertThat(contato.getTelefone().getTamanho(), is(not(greaterThan((10)))));
     }
 
     /**
@@ -73,7 +76,7 @@ public class ContatoTest {
     @Test
     public void nao_deve_conter_ddd_com_mais_de_2_caracteres() {
         Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
-        assertThat(contato.getDdd().getDDD().length(), is(not((3))));
+        assertThat(contato.getDdd().getDDD().length(), is(not(greaterThan((3)))));
     }
 
     /**
@@ -82,7 +85,7 @@ public class ContatoTest {
     @Test
     public void nao_deve_conter_ddd_com_menos_de_2_caracteres() {
         Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
-        assertThat(contato.getDdd().getDDD().length(), is(not((1))));
+        assertThat(contato.getDdd().getDDD().length(), is(not(lessThan((1)))));
     }
 
     /**
@@ -91,7 +94,7 @@ public class ContatoTest {
     @Test
     public void deve_conter_ddd_igual_a_2_caracteres() {
         Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
-        assertTrue(contato.getDdd().getDDD().length() == 2);
+        assertThat(contato.getDdd().getDDD().length(), is(equalTo(2)));
     }
 
     /**
