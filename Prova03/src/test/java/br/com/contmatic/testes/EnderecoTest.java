@@ -6,6 +6,9 @@ import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCode;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.matchesPattern;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -43,12 +46,21 @@ public class EnderecoTest {
     }
 
     /**
+     * Deve aceitar as regras do regex bairro.
+     */
+    @Test
+    public void deve_aceitar_as_regras_do_regex_bairro() {
+        Endereco endereco = Fixture.from(Endereco.class).gimme("EnderecoFixture");
+        assertThat(endereco.getBairro(), matchesPattern("^([a-zA-z0-9])*$"));
+    }
+
+    /**
      * Nao deve conter bairro com mais de 30 caracteres.
      */
     @Test
     public void nao_deve_conter_bairro_com_mais_de_30_caracteres() {
         Endereco endereco = Fixture.from(Endereco.class).gimme("EnderecoFixture");
-        assertThat(endereco.getBairro().length(), is(not((31))));
+        assertThat(endereco.getBairro().length(), is(not(greaterThan((31)))));
     }
 
     /**
@@ -57,7 +69,7 @@ public class EnderecoTest {
     @Test
     public void nao_deve_conter_bairro_com_menos_de_5_caracteres() {
         Endereco endereco = Fixture.from(Endereco.class).gimme("EnderecoFixture");
-        assertThat(endereco.getBairro().length(), is(not((4))));
+        assertThat(endereco.getBairro().length(), is(not(lessThan((4)))));
     }
 
     /**
@@ -75,7 +87,7 @@ public class EnderecoTest {
     @Test
     public void nao_deve_conter_uf_com_mais_de_2_caracteres() {
         Endereco endereco = Fixture.from(Endereco.class).gimme("EnderecoFixture");
-        assertThat(endereco.getUf().getDDD().length(), is(not(3)));
+        assertThat(endereco.getUf().getDDD().length(), is(not(greaterThan(3))));
 
     }
 
@@ -85,7 +97,7 @@ public class EnderecoTest {
     @Test
     public void nao_deve_conter_uf_com_menos_de_2_caracteres() {
         Endereco endereco = Fixture.from(Endereco.class).gimme("EnderecoFixture");
-        assertThat(endereco.getUf().getDDD().length(), is(not((1))));
+        assertThat(endereco.getUf().getDDD().length(), is(not(lessThan((1)))));
 
     }
 
@@ -99,12 +111,21 @@ public class EnderecoTest {
     }
 
     /**
+     * Deve aceitar as regras do regex cep.
+     */
+    @Test
+    public void deve_aceitar_as_regras_do_regex_cep() {
+        Endereco endereco = Fixture.from(Endereco.class).gimme("EnderecoFixture");
+        assertThat(endereco.getCep(), matchesPattern("[0-9]{5}-[\\d]{3}"));
+    }
+
+    /**
      * Nao deve conter cep com mais de 9 caracteres.
      */
     @Test
     public void nao_deve_conter_cep_com_mais_de_9_caracteres() {
         Endereco endereco = Fixture.from(Endereco.class).gimme("EnderecoFixture");
-        assertThat(endereco.getCep().length(), is(not((10))));
+        assertThat(endereco.getCep().length(), is(not(greaterThan(10))));
     }
 
     /**
@@ -123,7 +144,7 @@ public class EnderecoTest {
     @Test
     public void nao_deve_aceitar_complemento_com_mais_de_30_caracteres() {
         Endereco endereco = Fixture.from(Endereco.class).gimme("EnderecoFixture");
-        assertThat(endereco.getComplemento().length(), is(not(31)));
+        assertThat(endereco.getComplemento().length(), is(not(greaterThan(31))));
     }
 
     /**

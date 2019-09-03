@@ -20,15 +20,23 @@ import br.com.contmatic.enums.DDD;
 public class Endereco {
 
     /** The bairro. */
+    @Size(min = 5, max = 30)
+    @Pattern(regexp = "^([a-zA-Z])*$")
     private String bairro;
 
     /** The uf. */
+    @Size(max = 2)
     private DDD uf;
 
     /** The cep. */
+    @NotNull
+    @Pattern(regexp = "[0-9]{5}-[\\\\d]{3}")
+    @Max(9)
     private String cep;
 
     /** The complemento. */
+    @Null
+    @Size(max = 30)
     private String complemento;
 
     /**
@@ -59,8 +67,6 @@ public class Endereco {
      *
      * @return the complemento
      */
-    @Null
-    @Size(max = 30)
     public String getComplemento() {
         return complemento;
     }
@@ -79,7 +85,6 @@ public class Endereco {
      *
      * @return the bairro
      */
-    @Size(min = 5, max = 30)
     public String getBairro() {
         return bairro;
     }
@@ -98,7 +103,6 @@ public class Endereco {
      *
      * @return the uf
      */
-    @Size(max = 2)
     public DDD getUf() {
         return uf;
     }
@@ -117,9 +121,6 @@ public class Endereco {
      *
      * @return the cep
      */
-    @NotNull
-    @Pattern(regexp = "^\\\\d{5}-\\\\d{3}$")
-    @Max(9)
     public String getCep() {
         return cep;
     }

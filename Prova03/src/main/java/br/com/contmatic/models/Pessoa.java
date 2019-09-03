@@ -25,15 +25,25 @@ import org.hibernate.validator.constraints.URL;
 public class Pessoa {
 
     /** The nome. */
+    @NotBlank(message = "Nome é obrigatório")
+    @Size(min = 3, max = 30)
+    @Pattern(regexp = "^[[ ]|\\\\p{L}*]+$")
     private String nome;
 
     /** The email. */
+    @Email
+    @NotEmpty(message = "E-mail é obrigatório")
+    @URL
     private String email;
 
     /** The endereco. */
+    @Valid
+    @NotNull(message = "Endereço é obrigatório.")
     private Set<Endereco> endereco;
 
     /** The contatos. */
+    @Valid
+    @NotNull(message = "Não pode conter lista de contatos vazia.")
     private Set<Contato> contatos;
 
     /**
@@ -64,9 +74,6 @@ public class Pessoa {
      *
      * @return the nome
      */
-    @NotBlank(message = "Nome é obrigatório")
-    @Size(min = 3, max = 30)
-    @Pattern(regexp = "^[[ ]|\\\\p{L}*]+$")
     public String getNome() {
         return nome;
     }
@@ -85,9 +92,6 @@ public class Pessoa {
      *
      * @return the email
      */
-    @Email
-    @NotEmpty(message = "E-mail é obrigatório")
-    @URL
     public String getEmail() {
         return email;
     }
@@ -106,8 +110,6 @@ public class Pessoa {
      *
      * @return the endereco
      */
-    @Valid
-    @NotNull(message = "Endereço é obrigatório.")
     public Set<Endereco> getEndereco() {
 
         return this.endereco;
@@ -127,8 +129,6 @@ public class Pessoa {
      *
      * @return the contatos
      */
-    @Valid
-    @NotNull(message = "Não pode conter lista de contatos vazia.")
     public Set<Contato> getContatos() {
         return this.contatos;
     }

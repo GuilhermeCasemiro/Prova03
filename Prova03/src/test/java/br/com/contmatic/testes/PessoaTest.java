@@ -5,6 +5,7 @@ import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCode;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidGettersAndSetters;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.matchesPattern;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -40,6 +41,12 @@ public class PessoaTest {
     public void nao_deve_ter_nome_nulo() {
         Pessoa pessoa = Fixture.from(Pessoa.class).gimme("PessoaFixture");
         assertNotNull(pessoa.getNome());
+    }
+
+    @Test
+    public void deve_respeitar_o_regex_nome() {
+        Pessoa pessoa = Fixture.from(Pessoa.class).gimme("PessoaFixture");
+        assertThat(pessoa.getNome(), matchesPattern("^[[ ]|\\p{L}*]+$"));
     }
 
     /**
@@ -122,7 +129,6 @@ public class PessoaTest {
     @Test(expected = NullPointerException.class)
     public void deve_dar_erro_se_o_contato_for_nulo() {
         Pessoa pessoa = Fixture.from(Pessoa.class).gimme("PessoaFixture");
-        System.out.println(pessoa);
         assertNull(pessoa.acicionarContato(null));
     }
 
