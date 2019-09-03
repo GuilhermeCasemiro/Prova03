@@ -9,6 +9,7 @@ import br.com.contmatic.enums.DDD;
 import br.com.contmatic.enums.Telefone;
 import br.com.contmatic.models.Contato;
 import br.com.contmatic.models.Endereco;
+import br.com.contmatic.models.Funcionario;
 import br.com.contmatic.models.Pessoa;
 import br.com.contmatic.models.PessoaFisica;
 import br.com.contmatic.models.PessoaJuridica;
@@ -20,7 +21,7 @@ import br.com.six2six.fixturefactory.Rule;
  * The Class Fixtures.
  */
 public class Fixtures {
-    
+
     /**
      * Sets the up.
      */
@@ -96,6 +97,13 @@ public class Fixtures {
             {
                 add("cnpj", random("25885370000184", "34755982000143", "62155568000139", "38684848000150"));
                 add("razaoSocial", random("Lara e Enrico Filmagens", "Benedita e Marina Limpeza", "Helena e André Telas"));
+            }
+        });
+        Fixture.of(Funcionario.class).addTemplate("FuncionarioFixture", new Rule() {
+            {
+                add("salario", random(Short.class, range(1000, 9999)));
+                add("comissao", random(Short.class, range(0, 500)));
+                add("departamento", "Desenvolvimento");
             }
         });
     }
