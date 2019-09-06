@@ -1,17 +1,23 @@
 package br.com.contmatic.testes;
 
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
-import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEquals;
-import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCode;
+import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEqualsFor;
+import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCodeFor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidGettersAndSetters;
 import static com.google.code.beanmatchers.BeanMatchers.registerValueGenerator;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertNotNull;
+import static org.apache.commons.lang.RandomStringUtils.random;
+import static org.apache.commons.lang.StringUtils.EMPTY;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.joda.time.DateTime;
 import org.junit.BeforeClass;
@@ -23,11 +29,18 @@ import br.com.contmatic.fixtures.Fixtures;
 import br.com.contmatic.models.PessoaFisica;
 import br.com.six2six.fixturefactory.Fixture;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class PessoaFisicaTest.
  */
 public class PessoaFisicaTest {
+
+    /** The validator. */
+    private Validator validator;
+
+    /** The factory. */
+    private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+
+    PessoaFisica pessoaF = Fixture.from(PessoaFisica.class).gimme("PFisicaFixtureMasculino");
 
     /**
      * Sets the up.
@@ -52,9 +65,21 @@ public class PessoaFisicaTest {
      * Nao deve aceitar cpf nulo ou em branco.
      */
     @Test
-    public void nao_deve_aceitar_cpf_nulo_ou_em_branco() {
-        PessoaFisica Pfisica = Fixture.from(PessoaFisica.class).gimme("PFisicaFixtureMasculino");
-        assertNotNull(Pfisica.getCpf());
+    public void nao_deve_aceitar_cpf_nulo() {
+        pessoaF.setCpf(null);
+        assertFalse(isValid(pessoaF, "CPF obrigatório."));
+    }
+
+    @Test
+    public void nao_deve_aceitar_cpf_em_branco() {
+        pessoaF.setCpf(EMPTY);
+        assertFalse(isValid(pessoaF, "CPF obrigatório."));
+    }
+
+    @Test
+    public void deve_aceitar_um_cpf_valido() {
+        pessoaF.setCpf("40128625023");
+        assertTrue(isValid(pessoaF, pessoaF.getCpf()));
     }
 
     /**
@@ -62,8 +87,8 @@ public class PessoaFisicaTest {
      */
     @Test
     public void nao_deve_permitir_cpf_com_mais_de_11_caracteres() {
-        PessoaFisica pfFsica = Fixture.from(PessoaFisica.class).gimme("PFisicaFixtureMasculino");
-        assertThat(pfFsica.getCpf().length(), is(not((12))));
+        pessoaF.setCpf(random(12, false, true));
+        assertFalse(isValid(pessoaF, "CPF deve conter exatamente 11 caracteres."));
     }
 
     /**
@@ -71,8 +96,8 @@ public class PessoaFisicaTest {
      */
     @Test
     public void nao_deve_permitir_cpf_com_menos_de_11_caracteres() {
-        PessoaFisica pfFsica = Fixture.from(PessoaFisica.class).gimme("PFisicaFixtureMasculino");
-        assertThat(pfFsica.getCpf().length(), is(not((10))));
+        pessoaF.setCpf(random(9, false, true));
+        assertFalse(isValid(pessoaF, "CPF deve conter exatamente 11 caracteres."));
     }
 
     /**
@@ -80,8 +105,8 @@ public class PessoaFisicaTest {
      */
     @Test
     public void so_deve_aceitar_cpf_com_11_caracteres() {
-        PessoaFisica pfFsica = Fixture.from(PessoaFisica.class).gimme("PFisicaFixtureMasculino");
-        assertTrue(pfFsica.getCpf().length() == 11);
+        pessoaF.setCpf(random(11, false, true));
+        assertTrue(isValid(pessoaF, pessoaF.getCpf()));
     }
 
     /**
@@ -89,8 +114,14 @@ public class PessoaFisicaTest {
      */
     @Test
     public void nao_deve_aceitar_data_de_nascimento_nulo() {
-        PessoaFisica pfFsica = Fixture.from(PessoaFisica.class).gimme("PFisicaFixtureMasculino");
-        assertNotNull(pfFsica.getDataNascimento());
+        pessoaF.setDataNascimento(null);
+        assertFalse(isValid(pessoaF, "A data de nascimento não pode ser nula."));
+    }
+
+    @Test
+    public void nao_deve_aceitar_data_de_nascimento_maior_que_a_atual() {
+        pessoaF.setDataNascimento(new DateTime(2019, 10, 31, 15, 17));
+        assertFalse(isValid(pessoaF, "A data não pode ser mais recente que a atual."));
     }
 
     /**
@@ -98,8 +129,26 @@ public class PessoaFisicaTest {
      */
     @Test
     public void nao_deve_aceitar_sexo_nulo() {
-        PessoaFisica pfFsica = Fixture.from(PessoaFisica.class).gimme("PFisicaFixtureMasculino");
-        assertNotNull(pfFsica.getSexo());
+        pessoaF.setSexo(null);
+        assertFalse(isValid(pessoaF, "Sexo obrigatório."));
+    }
+
+    @Test
+    public void nao_deve_aceitar_sexo_com_numeros() {
+        pessoaF.setSexo(random(8, true, true));
+        assertFalse(isValid(pessoaF, "Não pode conter acentos, caracteres especiais e números no sexo."));
+    }
+
+    @Test
+    public void nao_deve_aceitar_sexo_com_acentos() {
+        pessoaF.setSexo("Fêminino");
+        assertFalse(isValid(pessoaF, "Não pode conter acentos, caracteres especiais e números no sexo."));
+    }
+
+    @Test
+    public void nao_deve_aceitar_sexo_com_caracteres_especiais() {
+        pessoaF.setSexo("F#####o");
+        assertFalse(isValid(pessoaF, "Não pode conter acentos, caracteres especiais e números no sexo."));
     }
 
     /**
@@ -107,8 +156,8 @@ public class PessoaFisicaTest {
      */
     @Test
     public void nao_deve_aceitar_sexo_com_menos_de_8_caracteres() {
-        PessoaFisica pfFsica = Fixture.from(PessoaFisica.class).gimme("PFisicaFixtureMasculino");
-        assertThat(pfFsica.getSexo().length(), is(not(7)));
+        pessoaF.setSexo(random(7, true, false));
+        assertFalse(isValid(pessoaF, "Sexo deve ter no mínimo 8 caracteres e no máximo 9."));
     }
 
     /**
@@ -116,8 +165,27 @@ public class PessoaFisicaTest {
      */
     @Test
     public void nao_deve_aceitar_sexo_com_mais_de_9_caracteres() {
-        PessoaFisica pfFsica = Fixture.from(PessoaFisica.class).gimme("PFisicaFixtureMasculino");
-        assertThat(pfFsica.getSexo().length(), is(not(10)));
+        pessoaF.setSexo(random(10, true, false));
+        assertFalse(isValid(pessoaF, "Sexo deve ter no mínimo 8 caracteres e no máximo 9."));
+    }
+
+    @Test
+    public void nao_deve_aceitar_sexo_com_a_primeira_letra_miniscula() {
+        pessoaF.setSexo("mASCULINO");
+        assertFalse(isValid(pessoaF, "Não pode conter acentos, caracteres especiais e números no sexo."));
+    }
+
+    @Test
+    public void deve_aceitar_um_sexo_valido() {
+        pessoaF.setSexo("Masculino");
+        assertTrue(isValid(pessoaF, "Masculino"));
+    }
+
+    @Test
+    public void deve_retornar_falso_se_os_cpfs_forem_diferentes() {
+        pessoaF.setCpf("02656650003");
+        PessoaFisica pessoaFisica = new PessoaFisica("15448873022");
+        assertFalse(pessoaF.equals(pessoaFisica));
     }
 
     /**
@@ -134,8 +202,7 @@ public class PessoaFisicaTest {
      */
     @Test
     public void deve_aceitar_as_regras_do_equals() {
-        gerarData();
-        assertThat(PessoaFisica.class, hasValidBeanEquals());
+        assertThat(PessoaFisica.class, hasValidBeanEqualsFor("cpf"));
     }
 
     /**
@@ -143,8 +210,7 @@ public class PessoaFisicaTest {
      */
     @Test
     public void deve_aceitar_as_regras_do_hashcode() {
-        gerarData();
-        assertThat(PessoaFisica.class, hasValidBeanHashCode());
+        assertThat(PessoaFisica.class, hasValidBeanHashCodeFor("cpf"));
     }
 
     /**
@@ -162,6 +228,17 @@ public class PessoaFisicaTest {
     public void deve_aceitar_as_regras_do_toString() {
         PessoaFisica pfFsica = Fixture.from(PessoaFisica.class).gimme("PFisicaFixtureMasculino");
         assertTrue(pfFsica.toString().contains("Masculino"));
+    }
+
+    public boolean isValid(PessoaFisica pessoaF, String mensagem) {
+        validator = factory.getValidator();
+        boolean valido = true;
+        Set<ConstraintViolation<PessoaFisica>> restricoes = validator.validate(pessoaF);
+        for(ConstraintViolation<PessoaFisica> constraintViolation : restricoes)
+            if (constraintViolation.getMessage().equalsIgnoreCase(mensagem))
+                valido = false;
+
+        return valido;
     }
 
 }

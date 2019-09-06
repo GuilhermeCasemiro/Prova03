@@ -16,9 +16,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.hibernate.validator.constraints.URL;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Pessoa.
  */
@@ -26,14 +24,13 @@ public class Pessoa {
 
     /** The nome. */
     @NotBlank(message = "Nome é obrigatório")
-    @Size(min = 3, max = 30)
-    @Pattern(regexp = "^[[ ]|\\\\p{L}*]+$")
+    @Pattern(regexp = "[A-Z]\\B\\w\\D*", message = "Nome não pode ter números ou caracteres especiais.")
+    @Size(min = 3, max = 30, message = "Nome não pode ter menos de 3 ou mais de 30 caracteres.")
     private String nome;
 
     /** The email. */
-    @Email
-    @NotEmpty(message = "E-mail é obrigatório")
-    @URL
+    @Email(message = "Deve ser um e-mail válido.")
+    @NotEmpty(message = "E-mail é obrigatório.")
     private String email;
 
     /** The endereco. */
@@ -58,15 +55,12 @@ public class Pessoa {
      *
      * @param nome the nome
      * @param email the email
-     * @param endereco the endereco
-     * @param contatos the contatos
      */
-    public Pessoa(String nome, String email, Set<Endereco> endereco, Set<Contato> contatos) {
+    public Pessoa(String nome, String email) {
         super();
         this.nome = nome;
         this.email = email;
-        this.endereco = endereco;
-        this.contatos = contatos;
+
     }
 
     /**
@@ -85,6 +79,7 @@ public class Pessoa {
      */
     public void setNome(String nome) {
         this.nome = nome;
+
     }
 
     /**
@@ -197,7 +192,7 @@ public class Pessoa {
      */
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return new HashCodeBuilder().append(nome).append(email).toHashCode();
     }
 
     /*
@@ -208,7 +203,17 @@ public class Pessoa {
     @Override
     public boolean equals(Object obj) {
 
-        return EqualsBuilder.reflectionEquals(this, obj);
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        Pessoa pessoa = (Pessoa) obj;
+        return new EqualsBuilder().append(nome, pessoa.nome).append(email, pessoa.email).isEquals();
     }
 
     /*

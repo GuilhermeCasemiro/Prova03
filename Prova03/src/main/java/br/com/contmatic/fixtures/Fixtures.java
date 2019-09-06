@@ -12,11 +12,10 @@ import br.com.contmatic.models.Endereco;
 import br.com.contmatic.models.Funcionario;
 import br.com.contmatic.models.Pessoa;
 import br.com.contmatic.models.PessoaFisica;
-import br.com.contmatic.models.PessoaJuridica;
+import br.com.contmatic.models.Empresa;
 import br.com.six2six.fixturefactory.Fixture;
 import br.com.six2six.fixturefactory.Rule;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Fixtures.
  */
@@ -71,7 +70,7 @@ public class Fixtures {
         Fixture.of(Pessoa.class).addTemplate("PessoaFixture", new Rule() {
             {
                 add("nome", random("Guilherme", "Márcio", "Ênio", "Ângela"));
-                add("email", "${nome}@contmatic.com.br");
+                add("email", "teste@contmatic.com.br");
                 add("endereco", has(2).of(Endereco.class, "EnderecoFixture"));
                 add("contatos", has(2).of(Contato.class, "ContatoFixoFixture"));
             }
@@ -93,16 +92,17 @@ public class Fixtures {
             }
         });
 
-        Fixture.of(PessoaJuridica.class).addTemplate("PJuridicaFixture", new Rule() {
+        Fixture.of(Empresa.class).addTemplate("EmpresaFixture", new Rule() {
             {
                 add("cnpj", random("25885370000184", "34755982000143", "62155568000139", "38684848000150"));
                 add("razaoSocial", random("Lara e Enrico Filmagens", "Benedita e Marina Limpeza", "Helena e André Telas"));
+                add("nomeFantasia", random("Western Games", "Nautilidae Games", "Games Mob"));
             }
         });
         Fixture.of(Funcionario.class).addTemplate("FuncionarioFixture", new Rule() {
             {
-                add("salario", random(Short.class, range(1000, 9999)));
-                add("comissao", random(Short.class, range(0, 500)));
+                add("salario", random(Long.class, range(1000, 9999)));
+                add("comissao", random(Long.class, range(0, 500)));
                 add("departamento", "Desenvolvimento");
             }
         });

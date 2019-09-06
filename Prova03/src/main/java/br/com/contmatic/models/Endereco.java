@@ -1,8 +1,10 @@
 package br.com.contmatic.models;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -13,30 +15,36 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 import br.com.contmatic.enums.DDD;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Endereco.
  */
 public class Endereco {
 
     /** The bairro. */
-    @Size(min = 5, max = 30)
-    @Pattern(regexp = "^([a-zA-Z])*$")
+    @NotBlank(message = "Bairro não pode ser nulo e nem estar vazio.")
+    @Size(min = 5, max = 30, message = "Bairro não pode conter menos de 5 caracteres e mais 30 de caracteres.")
+    @Pattern(regexp = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$", message = "Bairro não pode conter números e caracteres especiais.")
     private String bairro;
 
     /** The uf. */
-    @Size(max = 2)
+    @NotNull(message = "DDD não pode ser nulo.")
+    @Valid
     private DDD uf;
 
+    @NotNull(message = "O número da residência não pode ser nulo.")
+    @Min(value = 0, message = "O número da residência não ser negativo.")
+    @Max(value = 1500, message = "O número da residência não pode ser maior que 1500.")
+    private Integer numeroResidencia;
+
     /** The cep. */
-    @NotNull
-    @Pattern(regexp = "[0-9]{5}-[\\\\d]{3}")
-    @Max(9)
+    @NotBlank(message = "CEP não pode ser nulo e nem vazio.")
+    @Pattern(regexp = "[0-9]{5}-[\\\\d]{3}", message = "CEP inválido.")
+    @Size(min = 9, max = 9, message = "CEP não pode ter mais de 9 caracteres.")
     private String cep;
 
     /** The complemento. */
-    @Null
-    @Size(max = 30)
+    @Size(max = 30, message = "Complemento não pode ter mais de 30 caracteres.")
+    @Pattern(regexp = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ0-9 ]+$", message = "Deve inserir um complemento válido.")
     private String complemento;
 
     /**
@@ -49,16 +57,14 @@ public class Endereco {
     /**
      * Instantiates a new endereco.
      *
-     * @param bairro the bairro
-     * @param uf the uf
+     * @param numeroResidencia the numeroResidencia
      * @param cep the cep
      * @param complemento the complemento
      */
-    public Endereco(String bairro, DDD uf, String cep, String complemento) {
+    public Endereco(String cep, Integer numeroResidencia, String complemento) {
         super();
-        this.bairro = bairro;
-        this.uf = uf;
         this.cep = cep;
+        this.numeroResidencia = numeroResidencia;
         this.complemento = complemento;
     }
 
@@ -134,6 +140,14 @@ public class Endereco {
         this.cep = cep;
     }
 
+    public Integer getNumeroResidencia() {
+        return numeroResidencia;
+    }
+
+    public void setNumeroResidencia(Integer numeroResidencia) {
+        this.numeroResidencia = numeroResidencia;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -141,7 +155,7 @@ public class Endereco {
      */
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return new HashCodeBuilder().append(cep).append(numeroResidencia).append(complemento).hashCode();
     }
 
     /*
@@ -151,7 +165,18 @@ public class Endereco {
      */
     @Override
     public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        Endereco endereco = (Endereco) obj;
+        return new EqualsBuilder().append(cep, endereco.cep).append(numeroResidencia, endereco.numeroResidencia).append(complemento, endereco.complemento).isEquals();
     }
 
     /*

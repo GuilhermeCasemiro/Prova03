@@ -20,7 +20,6 @@ import br.com.contmatic.fixtures.Fixtures;
 import br.com.contmatic.models.Contato;
 import br.com.six2six.fixturefactory.Fixture;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ContatoTest.
  */

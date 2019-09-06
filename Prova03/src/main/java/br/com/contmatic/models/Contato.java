@@ -1,18 +1,16 @@
 package br.com.contmatic.models;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.hibernate.validator.constraints.Length;
 
 import br.com.contmatic.enums.DDD;
 import br.com.contmatic.enums.Telefone;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Contato.
  */
@@ -20,12 +18,12 @@ public class Contato {
 
     /** The telefone. */
     @Valid
-    @Max(9)
+    @NotNull
     Telefone telefone;
 
     /** The ddd. */
     @Valid
-    @Length(min = 2, max = 2)
+    @NotNull
     DDD ddd;
 
     /**
