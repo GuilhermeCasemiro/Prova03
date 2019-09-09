@@ -40,7 +40,11 @@ public class PessoaFisicaTest {
     /** The factory. */
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
+    /** The pessoa F. */
     PessoaFisica pessoaF = Fixture.from(PessoaFisica.class).gimme("PFisicaFixtureMasculino");
+
+    /** The pessoa fisica. */
+    PessoaFisica pessoaFisica = new PessoaFisica();
 
     /**
      * Sets the up.
@@ -70,16 +74,31 @@ public class PessoaFisicaTest {
         assertFalse(isValid(pessoaF, "CPF obrigatório."));
     }
 
+    /**
+     * Nao deve aceitar cpf em branco.
+     */
     @Test
     public void nao_deve_aceitar_cpf_em_branco() {
         pessoaF.setCpf(EMPTY);
         assertFalse(isValid(pessoaF, "CPF obrigatório."));
     }
 
+    /**
+     * Deve aceitar um cpf valido.
+     */
     @Test
     public void deve_aceitar_um_cpf_valido() {
-        pessoaF.setCpf("40128625023");
+        pessoaF.setCpf("401.286.250-23");
         assertTrue(isValid(pessoaF, pessoaF.getCpf()));
+    }
+
+    /**
+     * Nao deve aceitar um cpf invalido.
+     */
+    @Test
+    public void nao_deve_aceitar_um_cpf_invalido() {
+        pessoaF.setCpf("111.111.111-11");
+        assertFalse(isValid(pessoaF, "CPF inserido deve ser válido."));
     }
 
     /**
@@ -118,10 +137,22 @@ public class PessoaFisicaTest {
         assertFalse(isValid(pessoaF, "A data de nascimento não pode ser nula."));
     }
 
+    /**
+     * Nao deve aceitar data de nascimento maior que a atual.
+     */
     @Test
     public void nao_deve_aceitar_data_de_nascimento_maior_que_a_atual() {
         pessoaF.setDataNascimento(new DateTime(2019, 10, 31, 15, 17));
         assertFalse(isValid(pessoaF, "A data não pode ser mais recente que a atual."));
+    }
+
+    /**
+     * Deve aceitar uma data de nascimento valida.
+     */
+    @Test
+    public void deve_aceitar_uma_data_de_nascimento_valida() {
+        pessoaF.setDataNascimento(new DateTime(2019, 10, 25, 14, 30));
+        assertTrue(isValid(pessoaF, pessoaF.getDataNascimento().toString()));
     }
 
     /**
@@ -133,18 +164,36 @@ public class PessoaFisicaTest {
         assertFalse(isValid(pessoaF, "Sexo obrigatório."));
     }
 
+    /**
+     * Nao deve aceitar sexo em branco.
+     */
+    @Test
+    public void nao_deve_aceitar_sexo_em_branco() {
+        pessoaF.setSexo(EMPTY);
+        assertFalse(isValid(pessoaF, "Sexo obrigatório."));
+    }
+
+    /**
+     * Nao deve aceitar sexo com numeros.
+     */
     @Test
     public void nao_deve_aceitar_sexo_com_numeros() {
-        pessoaF.setSexo(random(8, true, true));
+        pessoaF.setSexo(random(8, false, true));
         assertFalse(isValid(pessoaF, "Não pode conter acentos, caracteres especiais e números no sexo."));
     }
 
+    /**
+     * Nao deve aceitar sexo com acentos.
+     */
     @Test
     public void nao_deve_aceitar_sexo_com_acentos() {
         pessoaF.setSexo("Fêminino");
         assertFalse(isValid(pessoaF, "Não pode conter acentos, caracteres especiais e números no sexo."));
     }
 
+    /**
+     * Nao deve aceitar sexo com caracteres especiais.
+     */
     @Test
     public void nao_deve_aceitar_sexo_com_caracteres_especiais() {
         pessoaF.setSexo("F#####o");
@@ -169,23 +218,30 @@ public class PessoaFisicaTest {
         assertFalse(isValid(pessoaF, "Sexo deve ter no mínimo 8 caracteres e no máximo 9."));
     }
 
-    @Test
-    public void nao_deve_aceitar_sexo_com_a_primeira_letra_miniscula() {
-        pessoaF.setSexo("mASCULINO");
-        assertFalse(isValid(pessoaF, "Não pode conter acentos, caracteres especiais e números no sexo."));
-    }
-
+    /**
+     * Deve aceitar um sexo valido.
+     */
     @Test
     public void deve_aceitar_um_sexo_valido() {
         pessoaF.setSexo("Masculino");
         assertTrue(isValid(pessoaF, "Masculino"));
     }
 
+    /**
+     * Deve retornar falso se os cpfs forem diferentes.
+     */
     @Test
     public void deve_retornar_falso_se_os_cpfs_forem_diferentes() {
         pessoaF.setCpf("02656650003");
-        PessoaFisica pessoaFisica = new PessoaFisica("15448873022");
+        pessoaFisica.setCpf("15448873022");
         assertFalse(pessoaF.equals(pessoaFisica));
+    }
+
+    @Test
+    public void deve_retornar_verdadeiro_se_os_cpfs_forem_iguais() {
+        pessoaF.setCpf("02656650003");
+        pessoaFisica.setCpf("02656650003");
+        assertTrue(pessoaF.equals(pessoaFisica));
     }
 
     /**
@@ -230,6 +286,13 @@ public class PessoaFisicaTest {
         assertTrue(pfFsica.toString().contains("Masculino"));
     }
 
+    /**
+     * Checks if is valid.
+     *
+     * @param pessoaF the pessoa F
+     * @param mensagem the mensagem
+     * @return true, if is valid
+     */
     public boolean isValid(PessoaFisica pessoaF, String mensagem) {
         validator = factory.getValidator();
         boolean valido = true;

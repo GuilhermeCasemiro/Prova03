@@ -5,8 +5,8 @@ import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCodeFor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidGettersAndSetters;
 import static org.apache.commons.lang.RandomStringUtils.random;
 import static org.apache.commons.lang.StringUtils.EMPTY;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -37,7 +37,17 @@ public class PessoaTest {
     /** The factory. */
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
+    /** The pessoa. */
     private Pessoa pessoa = Fixture.from(Pessoa.class).gimme("PessoaFixture");
+
+    /** The pessoa 2. */
+    private Pessoa pessoa2 = Fixture.from(Pessoa.class).gimme("PessoaFixture");
+
+    /** The contato. */
+    private Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
+
+    /** The endereco. */
+    private Endereco endereco = Fixture.from(Endereco.class).gimme("EnderecoFixture");
 
     /**
      * Sets the up.
@@ -79,6 +89,9 @@ public class PessoaTest {
         assertTrue(isValid(pessoa, "Guilherme"));
     }
 
+    /**
+     * Pode aceitar nome com acentos.
+     */
     @Test
     public void pode_aceitar_nome_com_acentos() {
         pessoa.setNome("Márcio");
@@ -106,12 +119,21 @@ public class PessoaTest {
     }
 
     /**
+     * Nao deve aceitar nome com caracteres especiais.
+     */
+    @Test
+    public void nao_deve_aceitar_nome_com_caracteres_especiais() {
+        pessoa.setNome("Guilherm##");
+        assertFalse(isValid(pessoa, "Nome não pode ter números ou caracteres especiais."));
+    }
+
+    /**
      * Nao deve aceitar nome com menos de 2 caracteres.
      */
     @Test
     public void nao_deve_aceitar_nome_com_menos_de_2_caracteres() {
 
-        pessoa.setNome(random(1));
+        pessoa.setNome(random(1, true, false));
         assertFalse(isValid(pessoa, "Nome não pode ter menos de 3 ou mais de 30 caracteres."));
     }
 
@@ -121,7 +143,7 @@ public class PessoaTest {
     @Test()
     public void nao_deve_aceitar_nome_com_mais_de_30_caracteres() {
 
-        pessoa.setNome(random(60));
+        pessoa.setNome(random(60, true, false));
         assertFalse(isValid(pessoa, "Nome não pode ter menos de 3 ou mais de 30 caracteres."));
     }
 
@@ -131,7 +153,7 @@ public class PessoaTest {
     @Test
     public void deve_aceitar_nomes_com_mais_de_2_caracteres() {
 
-        pessoa.setNome(random(10));
+        pessoa.setNome(random(10, true, false));
         assertTrue(isValid(pessoa, pessoa.getNome()));
     }
 
@@ -174,7 +196,7 @@ public class PessoaTest {
     public void nao_deve_conter_email_invalido() {
 
         pessoa.setEmail("teste@@@contmatic.com.br");
-        assertFalse(isValid(pessoa, "Deve ser um e-mail válido."));
+        assertFalse(isValid(pessoa, "Deve inserir um e-mail válido."));
     }
 
     /* Testes dos Contatos */
@@ -186,7 +208,7 @@ public class PessoaTest {
     public void nao_deve_ter_contato_nulo() {
 
         pessoa.setContatos(null);
-        assertFalse(isValid(pessoa, "Não pode conter lista de contatos vazia."));
+        assertFalse(isValid(pessoa, "Não pode conter lista de contatos nula."));
     }
 
     /**
@@ -195,66 +217,112 @@ public class PessoaTest {
     @Test
     public void deve_retornar_verdadeiro_se_o_contato_nao_for_nulo() {
 
-        Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
         assertTrue(pessoa.acicionarContato(contato));
-    }
-
-    /**
-     * Deve dar erro se o contato for nulo.
-     */
-    @Test(expected = NullPointerException.class)
-    public void deve_dar_erro_se_o_contato_for_nulo() {
-
-        assertNull(pessoa.acicionarContato(null));
     }
 
     /* Testes dos Endereços */
 
     /**
-     * Nao deve conter endereco nulo.
+     * Nao deve aceitar endereco nulo.
      */
     @Test
-    public void nao_deve_conter_endereco_nulo() {
+    public void nao_deve_aceitar_endereco_nulo() {
 
         pessoa.setEndereco(null);
         assertFalse(isValid(pessoa, "Endereço é obrigatório."));
     }
 
     /**
-     * Deve retornar verdadeiro se o endereco nao for nulo.
+     * Deve retornar verdadeiro se o endereco for valido.
      */
     @Test
-    public void deve_retornar_verdadeiro_se_o_endereco_nao_for_nulo() {
+    public void deve_retornar_verdadeiro_se_o_endereco_for_valido() {
 
         Endereco endereco = Fixture.from(Endereco.class).gimme("EnderecoFixture");
         assertTrue(pessoa.acicionarEndereco(endereco));
     }
 
-    /**
-     * Deve dar erro se o endereco for nulo.
-     */
-    @Test(expected = NullPointerException.class)
-    public void deve_dar_erro_se_o_endereco_for_nulo() {
-        pessoa.setEndereco(null);
-        assertNull(pessoa.acicionarEndereco(null));
-    }
-
     /*----------------------------------------------------------------------------------*/
 
+    /**
+     * Deve retornar falso se o nome e o email forem diferentes.
+     */
     @Test
     public void deve_retornar_falso_se_o_nome_e_o_email_forem_diferentes() {
-        Pessoa pessoa2 = Fixture.from(Pessoa.class).gimme("PessoaFixture");
+        pessoa.setNome("Guilherme");
+        pessoa.setEmail("bataxi@dot-coin.com");
+
         pessoa2.setNome("Teste");
         pessoa2.setEmail("doyo@rich-mail.net");
         assertFalse(pessoa.equals(pessoa2));
     }
 
+    /**
+     * Deve retornar verdadeiro se o nome e o email forem iguais.
+     */
     @Test
     public void deve_retornar_verdadeiro_se_o_nome_e_o_email_forem_iguais() {
-        Pessoa pessoa2 = Fixture.from(Pessoa.class).gimme("PessoaFixture");
-        pessoa2.setEmail(pessoa.getEmail());
-        pessoa2.setNome(pessoa.getNome());
+        pessoa.setNome("Teste");
+        pessoa.setEmail("doyo@rich-mail.net");
+
+        pessoa2.setNome("Teste");
+        pessoa2.setEmail("doyo@rich-mail.net");
         assertTrue(pessoa.equals(pessoa2));
+    }
+
+    /**
+     * Nao deve aceitar 2 contatos iguais.
+     */
+    @Test
+    public void nao_deve_aceitar_2_contatos_iguais() {
+        Contato contato2 = contato;
+
+        pessoa.getContatos().clear();
+        pessoa.acicionarContato(contato);
+        pessoa.acicionarContato(contato2);
+        assertEquals(1, pessoa.getContatos().size());
+
+    }
+
+    /**
+     * Deve aceitar 2 contatos diferentes.
+     */
+    @Test
+    public void deve_aceitar_2_contatos_diferentes() {
+        Contato contato2 = Fixture.from(Contato.class).gimme("ContatoCelularFixture");
+
+        pessoa.getContatos().clear();
+        pessoa.acicionarContato(contato);
+        pessoa.acicionarContato(contato2);
+        assertEquals(2, pessoa.getContatos().size());
+
+    }
+
+    /**
+     * Nao deve aceitar 2 enderecos iguais.
+     */
+    @Test
+    public void nao_deve_aceitar_2_enderecos_iguais() {
+        Endereco endereco2 = endereco;
+        pessoa.getEndereco().clear();
+        pessoa.acicionarEndereco(endereco);
+        pessoa.acicionarEndereco(endereco2);
+        assertEquals(1, pessoa.getEndereco().size());
+
+    }
+
+    /**
+     * Deve aceitar 2 enderecos diferentes.
+     */
+    @Test
+    public void deve_aceitar_2_enderecos_diferentes() {
+        Endereco endereco2 = Fixture.from(Endereco.class).gimme("EnderecoFixture");
+        pessoa.getEndereco().clear();
+        pessoa.acicionarEndereco(endereco);
+        pessoa.acicionarEndereco(endereco2);
+
+        assertEquals(2, pessoa.getEndereco().size());
+
     }
 
     /**
@@ -286,8 +354,8 @@ public class PessoaTest {
      */
     @Test
     public void deve_respeitar_o_toString() {
-
-        assertTrue(pessoa.toString().contains("contmatic"));
+        pessoa.setNome("Guilherme");
+        assertTrue(pessoa.toString().contains("Guilherme"));
     }
 
     /**

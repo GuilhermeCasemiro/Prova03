@@ -24,12 +24,12 @@ public class Pessoa {
 
     /** The nome. */
     @NotBlank(message = "Nome é obrigatório")
-    @Pattern(regexp = "[A-Z]\\B\\w\\D*", message = "Nome não pode ter números ou caracteres especiais.")
+    @Pattern(regexp = "[^_\\W\\d][záéíóúàèìòùâêîôûãõ]*", message = "Nome não pode ter números ou caracteres especiais.")
     @Size(min = 3, max = 30, message = "Nome não pode ter menos de 3 ou mais de 30 caracteres.")
     private String nome;
 
     /** The email. */
-    @Email(message = "Deve ser um e-mail válido.")
+    @Email(message = "Deve inserir um e-mail válido.")
     @NotEmpty(message = "E-mail é obrigatório.")
     private String email;
 
@@ -40,7 +40,7 @@ public class Pessoa {
 
     /** The contatos. */
     @Valid
-    @NotNull(message = "Não pode conter lista de contatos vazia.")
+    @NotNull(message = "Não pode conter lista de contatos nula.")
     private Set<Contato> contatos;
 
     /**
@@ -175,7 +175,7 @@ public class Pessoa {
 
     /**
      * Remover contato.
-     *
+     * 
      * @param contato the contato
      * @return true, if successful
      */

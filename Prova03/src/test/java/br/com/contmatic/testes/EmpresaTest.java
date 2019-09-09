@@ -35,7 +35,11 @@ public class EmpresaTest {
     /** The factory. */
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
+    /** The empresa. */
     private Empresa empresa = Fixture.from(Empresa.class).gimme("EmpresaFixture");
+
+    /** The empresa 2. */
+    Empresa empresa2 = new Empresa();
 
     /**
      * Sets the up.
@@ -55,6 +59,9 @@ public class EmpresaTest {
         assertFalse(isValid(empresa, "CNPJ obrigatório."));
     }
 
+    /**
+     * Nao deve aceitar cnpj vazio.
+     */
     @Test
     public void nao_deve_aceitar_cnpj_vazio() {
         empresa.setCnpj(EMPTY);
@@ -87,25 +94,34 @@ public class EmpresaTest {
     @Test
     public void deve_aceitar_cnpj_com_14_caracteres() {
 
-        empresa.setCnpj("23495307000106");
-        assertTrue(isValid(empresa, "23495307000106"));
+        empresa.setCnpj("20.504.365/0001-60");
+        assertTrue(isValid(empresa, "20.504.365/0001-60"));
     }
 
+    /**
+     * Deve aceitar so cnpj valido.
+     */
     @Test
     public void deve_aceitar_so_cnpj_valido() {
 
-        empresa.setCnpj("55602187000195");
-        assertTrue(isValid(empresa, "55602187000195"));
+        empresa.setCnpj("41.081.011/0001-20");
+        assertTrue(isValid(empresa, "41.081.011/0001-20"));
     }
 
+    /**
+     * Nao deve aceitar um cnpj invalido.
+     */
     @Test
     public void nao_deve_aceitar_um_cnpj_invalido() {
 
-        empresa.setCnpj("23A95307000106");
+        empresa.setCnpj("18.317.482/001-73");
         assertFalse(isValid(empresa, "O CNPJ deve ser válido."));
     }
     /* Testes da Razão Social */
 
+    /**
+     * Nao deve aceitar razao social nula.
+     */
     @Test
     public void nao_deve_aceitar_razao_social_nula() {
 
@@ -113,6 +129,9 @@ public class EmpresaTest {
         assertFalse(isValid(empresa, "Razão Social é obrigatório."));
     }
 
+    /**
+     * Nao deve aceitar razao social vazia.
+     */
     @Test
     public void nao_deve_aceitar_razao_social_vazia() {
 
@@ -120,6 +139,9 @@ public class EmpresaTest {
         assertFalse(isValid(empresa, "Razão Social é obrigatório."));
     }
 
+    /**
+     * Deve so aceitar razao sociao valida.
+     */
     @Test
     public void deve_so_aceitar_razao_sociao_valida() {
 
@@ -127,12 +149,18 @@ public class EmpresaTest {
         assertTrue(isValid(empresa, "Rodrigo e Milena Alimentos ME"));
     }
 
+    /**
+     * Nao deve aceitar razao social com numeros.
+     */
     @Test
-    public void nao_deve_aceitar_razao_social_invalida() {
+    public void nao_deve_aceitar_razao_social_com_numeros() {
         empresa.setRazaoSocial("Rodrig0 e Milena 4limentos M3");
         assertFalse(isValid(empresa, "Razão Social inválida."));
     }
 
+    /**
+     * Nao deve aceitar razao social com caracteres especiais.
+     */
     @Test
     public void nao_deve_aceitar_razao_social_com_caracteres_especiais() {
         empresa.setRazaoSocial("Rodrig0 e Milen@ 4lim$ntos M3");
@@ -159,12 +187,18 @@ public class EmpresaTest {
         assertFalse(isValid(empresa, "Razão social deve ter no minino 10 caracteres e no maixmo 30 caracteres."));
     }
 
+    /**
+     * So deve aceitar razao social entre 10 e 30 caracteres.
+     */
     @Test
     public void so_deve_aceitar_razao_social_entre_10_e_30_caracteres() {
         empresa.setRazaoSocial("Nicolas e Severino Comercio de Bebidas Ltda");
         assertTrue(isValid(empresa, "Nicolas e Severino Comercio de Bebidas Ltda"));
     }
 
+    /**
+     * Deve aceitar razao social valida.
+     */
     @Test
     public void deve_aceitar_razao_social_valida() {
 
@@ -174,6 +208,9 @@ public class EmpresaTest {
 
     /* Testes da Nome Fantasia */
 
+    /**
+     * Nao deve aceitar nome fantasia nulo.
+     */
     @Test
     public void nao_deve_aceitar_nome_fantasia_nulo() {
 
@@ -181,6 +218,9 @@ public class EmpresaTest {
         assertFalse(isValid(empresa, "Nome fantasia é obrigatório."));
     }
 
+    /**
+     * Nao deve aceitar nome fantasia vazia.
+     */
     @Test
     public void nao_deve_aceitar_nome_fantasia_vazia() {
 
@@ -188,6 +228,9 @@ public class EmpresaTest {
         assertFalse(isValid(empresa, "Nome fantasia é obrigatório."));
     }
 
+    /**
+     * Deve so aceitar nome fantasia valida.
+     */
     @Test
     public void deve_so_aceitar_nome_fantasia_valida() {
 
@@ -195,12 +238,18 @@ public class EmpresaTest {
         assertTrue(isValid(empresa, "StarWood Games"));
     }
 
+    /**
+     * Nao deve aceitar nome fantasia invalida.
+     */
     @Test
     public void nao_deve_aceitar_nome_fantasia_invalida() {
         empresa.setNomeFantasia("St4rW00d G4m3s");
         assertFalse(isValid(empresa, "Nome Fantasia inválido."));
     }
 
+    /**
+     * Nao deve aceitar nome fantasia com caracteres especiais.
+     */
     @Test
     public void nao_deve_aceitar_nome_fantasia_com_caracteres_especiais() {
         empresa.setNomeFantasia("St@rW**d Games");
@@ -227,12 +276,18 @@ public class EmpresaTest {
         assertFalse(isValid(empresa, "Nome fantasia deve ter no minimo 10 caracteres e no maixmo 30 caracteres."));
     }
 
+    /**
+     * So deve aceitar nome fantasia entre 10 e 30 caracteres.
+     */
     @Test
     public void so_deve_aceitar_nome_fantasia_entre_10_e_30_caracteres() {
         empresa.setNomeFantasia("Mercearia União");
         assertTrue(isValid(empresa, "Mercearia União"));
     }
 
+    /**
+     * Deve aceitar nome fantasia valida.
+     */
     @Test
     public void deve_aceitar_nome_fantasia_valida() {
 
@@ -240,19 +295,25 @@ public class EmpresaTest {
         assertTrue(isValid(empresa, "Western Games"));
     }
 
+    /**
+     * Deve retornar falso se os cnpjs forem diferentes.
+     */
     @Test
     public void deve_retornar_falso_se_os_cnpjs_forem_diferentes() {
-        Empresa empresa2 = Fixture.from(Empresa.class).gimme("EmpresaFixture");
-        empresa.setCnpj("08314240000172");
-        empresa2.setCnpj("53551311000105");
+
+        empresa.setCnpj("18.317.482/0001-73");
+        empresa2.setCnpj("96.827.078/0001-53");
         assertFalse(empresa.equals(empresa2));
     }
 
+    /**
+     * Deve retornar verdadeiro se os cnpjs forem iguais.
+     */
     @Test
     public void deve_retornar_verdadeiro_se_os_cnpjs_forem_iguais() {
-        Empresa empresa2 = Fixture.from(Empresa.class).gimme("EmpresaFixture");
-        empresa.setCnpj("53551311000105");
-        empresa2.setCnpj("53551311000105");
+
+        empresa.setCnpj("11.296.795/0001-43");
+        empresa2.setCnpj("11.296.795/0001-43");
         assertTrue(empresa.equals(empresa2));
     }
 
@@ -286,10 +347,17 @@ public class EmpresaTest {
     @Test
     public void deve_aceitar_as_regras_do_toString() {
 
-        empresa.setCnpj("34755982000143");
-        assertTrue(empresa.toString().contains("34755982000143"));
+        empresa.setCnpj("26.957.703/0001-04");
+        assertTrue(empresa.toString().contains("26.957.703/0001-04"));
     }
 
+    /**
+     * Checks if is valid.
+     *
+     * @param empresa the empresa
+     * @param mensagem the mensagem
+     * @return true, if is valid
+     */
     public boolean isValid(Empresa empresa, String mensagem) {
         validator = factory.getValidator();
         boolean valido = true;

@@ -1,6 +1,7 @@
 package br.com.contmatic.enums;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -92,11 +93,13 @@ public enum DDD {
     /** The uf. */
     @NotBlank(message = "UF é obrigatório.")
     @Size(min = 2, max = 2, message = "UF não pode ter menos ou mais de 2 caracteres.")
+    @Pattern(regexp = "[A-Z\\D]", message = "UF não pode conter letras minúsculas, números e caracteres especiais.")
     private String uf;
 
     /** The ddd. */
     @NotBlank(message = "DDD é obrigatório.")
     @Size(min = 2, max = 2, message = "DDD não pode ter menos ou mais de 2 caracteres.")
+    @Pattern(regexp = "\\d", message = "DDD não pode conter letras e caracteres especiais.")
     private String ddd;
 
     /**
@@ -119,6 +122,10 @@ public enum DDD {
         return this.uf;
     }
 
+    public void setUf(String uf) {
+        this.uf = uf;
+    }
+
     /**
      * Gets the ddd.
      *
@@ -126,6 +133,10 @@ public enum DDD {
      */
     public String getDDD() {
         return this.ddd;
+    }
+
+    public void setDdd(String ddd) {
+        this.ddd = ddd;
     }
 
 }

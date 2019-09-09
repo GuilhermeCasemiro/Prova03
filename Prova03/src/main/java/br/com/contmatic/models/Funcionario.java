@@ -21,12 +21,12 @@ public class Funcionario extends PessoaFisica {
     @NotNull(message = "Salário é obrigatório.")
     @DecimalMin(value = "1000.00", message = "O salário não pode ser menor que a base de R$: 1000.00.")
     @DecimalMax(value = "8500.00", message = "O salário não pode ser maior que R$: 8500.00.")
-    private Long salario;
+    private long salario;
 
     /** The comissao. */
     @DecimalMin(value = "0.0", message = "A comissão não pode ser menor que R$: 0.00.")
     @DecimalMax(value = "500.00", message = "A comissão não pode ser maior que R$: 500.00.")
-    private Long comissao;
+    private long comissao;
 
     /** The departamento. */
     @NotBlank(message = "Ter um departamento é obrigatório.")
@@ -48,7 +48,7 @@ public class Funcionario extends PessoaFisica {
      * @param comissao the comissao
      * @param departamento the departamento
      */
-    public Funcionario(Long salario, Long comissao, String departamento) {
+    public Funcionario(long salario, long comissao, String departamento) {
         super();
         this.comissao = comissao;
         this.salario = salario;
@@ -61,7 +61,7 @@ public class Funcionario extends PessoaFisica {
      * @return the salario
      */
 
-    public Long getSalario() {
+    public long getSalario() {
         return salario;
     }
 
@@ -70,7 +70,7 @@ public class Funcionario extends PessoaFisica {
      *
      * @param salario the new salario
      */
-    public void setSalario(Long salario) {
+    public void setSalario(long salario) {
         this.salario = salario;
     }
 
@@ -79,7 +79,7 @@ public class Funcionario extends PessoaFisica {
      *
      * @return the comissao
      */
-    public Long getComissao() {
+    public long getComissao() {
         return comissao;
     }
 
@@ -88,7 +88,7 @@ public class Funcionario extends PessoaFisica {
      *
      * @param comissao the new comissao
      */
-    public void setComissao(Long comissao) {
+    public void setComissao(long comissao) {
         this.comissao = comissao;
     }
 
@@ -118,7 +118,7 @@ public class Funcionario extends PessoaFisica {
     @Override
     public int hashCode() {
 
-        return new HashCodeBuilder().appendSuper(super.hashCode()).append(salario).append(comissao).append(departamento).toHashCode();
+        return new HashCodeBuilder().appendSuper(super.hashCode()).toHashCode();
     }
 
     /*
@@ -139,7 +139,7 @@ public class Funcionario extends PessoaFisica {
             return false;
         }
         Funcionario funcionario = (Funcionario) obj;
-        return new EqualsBuilder().appendSuper(true).append(salario, funcionario.salario).append(comissao, funcionario.comissao).append(departamento, funcionario.departamento).isEquals();
+        return new EqualsBuilder().append(super.getCpf(), funcionario.getCpf()).isEquals();
     }
 
     /*

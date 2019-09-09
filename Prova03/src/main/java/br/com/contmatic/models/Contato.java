@@ -18,12 +18,12 @@ public class Contato {
 
     /** The telefone. */
     @Valid
-    @NotNull
+    @NotNull(message = "Telefone não pode ser nulo.")
     Telefone telefone;
 
     /** The ddd. */
     @Valid
-    @NotNull
+    @NotNull(message = "DDD não pode ser nulo.")
     DDD ddd;
 
     /**
@@ -88,7 +88,7 @@ public class Contato {
      */
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return new HashCodeBuilder().append(telefone).append(ddd).toHashCode();
     }
 
     /*
@@ -98,7 +98,17 @@ public class Contato {
      */
     @Override
     public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        Contato contato = (Contato) obj;
+        return new EqualsBuilder().append(telefone, contato.telefone).append(ddd, contato.ddd).isEquals();
     }
 
     /*

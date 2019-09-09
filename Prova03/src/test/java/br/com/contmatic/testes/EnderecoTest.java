@@ -29,12 +29,14 @@ import br.com.six2six.fixturefactory.Fixture;
  * The Class EnderecoTest.
  */
 public class EnderecoTest {
+    
     /** The validator. */
     private Validator validator;
 
     /** The factory. */
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
+    /** The endereco. */
     Endereco endereco = Fixture.from(Endereco.class).gimme("EnderecoFixture");
 
     /**
@@ -55,30 +57,45 @@ public class EnderecoTest {
         assertFalse(isValid(endereco, "Bairro não pode ser nulo e nem estar vazio."));
     }
 
+    /**
+     * Nao deve aceitar bairro vazio.
+     */
     @Test
     public void nao_deve_aceitar_bairro_vazio() {
         endereco.setBairro(EMPTY);
         assertFalse(isValid(endereco, "Bairro não pode ser nulo e nem estar vazio."));
     }
 
+    /**
+     * Deve aceitar um bairro valido.
+     */
     @Test
     public void deve_aceitar_um_bairro_valido() {
         endereco.setBairro("Vila Mariana");
         assertTrue(isValid(endereco, "Vila Mariana"));
     }
 
+    /**
+     * Nao deve aceitar um bairro invalido.
+     */
     @Test
     public void nao_deve_aceitar_um_bairro_invalido() {
         endereco.setBairro("Vil@ Marian@");
         assertFalse(isValid(endereco, "Bairro não pode conter números e caracteres especiais."));
     }
 
+    /**
+     * Deve aceitar bairro com acentuacao.
+     */
     @Test
     public void deve_aceitar_bairro_com_acentuacao() {
         endereco.setBairro("Tatuapé");
         assertTrue(isValid(endereco, endereco.getBairro()));
     }
 
+    /**
+     * Nao deve aceitar bairro com numero.
+     */
     @Test
     public void nao_deve_aceitar_bairro_com_numero() {
         endereco.setBairro("T4tuap3");
@@ -103,6 +120,9 @@ public class EnderecoTest {
         assertFalse(isValid(endereco, "Bairro não pode conter menos de 5 caracteres e mais 30 de caracteres."));
     }
 
+    /**
+     * Bairro deve conter entre 5 e 30 caracteres.
+     */
     @Test
     public void bairro_deve_conter_entre_5_e_30_caracteres() {
         endereco.setBairro(random(15, true, true));
@@ -116,13 +136,16 @@ public class EnderecoTest {
      */
     @Test
     public void nao_deve_conter_uf_nulo() {
-        endereco.setUf(null);
+        endereco.setEstado(null);
         assertFalse(isValid(endereco, "DDD não pode ser nulo."));
     }
 
+    /**
+     * Deve aceitar um ddd valido.
+     */
     @Test
     public void deve_aceitar_um_ddd_valido() {
-        endereco.setUf(DDD.SAO_PAULO);
+        endereco.setEstado(DDD.SAO_PAULO);
         assertTrue(isValid(endereco, DDD.SAO_PAULO.getDDD()));
     }
     /* Testes do CEP */
@@ -136,24 +159,36 @@ public class EnderecoTest {
         assertFalse(isValid(endereco, "CEP não pode ser nulo e nem vazio."));
     }
 
+    /**
+     * Nao deve aceitar cep vazio.
+     */
     @Test
     public void nao_deve_aceitar_cep_vazio() {
         endereco.setCep(EMPTY);
         assertFalse(isValid(endereco, "CEP não pode ser nulo e nem vazio."));
     }
 
+    /**
+     * Deve aceitar um cep valido.
+     */
     @Test
     public void deve_aceitar_um_cep_valido() {
         endereco.setCep("70385530");
         assertTrue(isValid(endereco, endereco.getCep()));
     }
 
+    /**
+     * Nao deve aceitar um cep invalido.
+     */
     @Test
     public void nao_deve_aceitar_um_cep_invalido() {
         endereco.setCep("70385-53A");
         assertFalse(isValid(endereco, "CEP inválido."));
     }
 
+    /**
+     * Na deve aceitar um cep com caracteres especiais.
+     */
     @Test
     public void na_deve_aceitar_um_cep_com_caracteres_especiais() {
         endereco.setCep("7038&-53@");
@@ -169,12 +204,18 @@ public class EnderecoTest {
         assertFalse(isValid(endereco, "CEP não pode ter mais de 9 caracteres."));
     }
 
+    /**
+     * Nao deve conter cep com menos de 9 caracteres.
+     */
     @Test
     public void nao_deve_conter_cep_com_menos_de_9_caracteres() {
         endereco.setCep(random(8, false, true));
         assertFalse(isValid(endereco, "CEP não pode ter mais de 9 caracteres."));
     }
 
+    /**
+     * Deve aceitar cep com 9 caracteres.
+     */
     @Test
     public void deve_aceitar_cep_com_9_caracteres() {
         endereco.setBairro(random(9));
@@ -182,6 +223,9 @@ public class EnderecoTest {
     }
     /*-------------------------------------------------------------------------*/
 
+    /**
+     * Pode aceitar complemento nulo.
+     */
     /* Test do Complemento */
     @Test
     public void pode_aceitar_complemento_nulo() {
@@ -199,18 +243,27 @@ public class EnderecoTest {
         assertTrue(isValid(endereco, EMPTY));
     }
 
+    /**
+     * Deve aceitar um complemento valido.
+     */
     @Test
     public void deve_aceitar_um_complemento_valido() {
         endereco.setComplemento("Apartamento 41B");
         assertTrue(isValid(endereco, endereco.getComplemento()));
     }
 
+    /**
+     * Deve aceitar um complemento com menos de 30 caracteres.
+     */
     @Test
     public void deve_aceitar_um_complemento_com_menos_de_30_caracteres() {
         endereco.setComplemento(random(29, true, true));
         assertTrue(isValid(endereco, endereco.getComplemento()));
     }
 
+    /**
+     * Nao deve aceitar complemento com caracteres especiais.
+     */
     @Test
     public void nao_deve_aceitar_complemento_com_caracteres_especiais() {
         endereco.setComplemento("$Apartamento 41-B");
@@ -227,47 +280,52 @@ public class EnderecoTest {
     }
     /*---------------------------------------------------------------------------------------*/
 
-    /* Teste do número */
+    /* Teste do número residencial */
 
-    @Test
-    public void nao_deve_aceitar_numero_residencia() {
-        endereco.setNumeroResidencia(null);
-        assertFalse(isValid(endereco, "O número da residência não pode ser nulo."));
-    }
-
+    /**
+     * Nao deve aceitar numero residencia negativo.
+     */
     @Test
     public void nao_deve_aceitar_numero_residencia_negativo() {
         endereco.setNumeroResidencia(-1);
         assertFalse(isValid(endereco, "O número da residência não ser negativo."));
     }
 
+    /**
+     * Nao deve aceitar numero residencia maior que 1500.
+     */
     @Test
     public void nao_deve_aceitar_numero_residencia_maior_que_1500() {
         endereco.setNumeroResidencia(1501);
         assertFalse(isValid(endereco, "O número da residência não pode ser maior que 1500."));
     }
 
+    /**
+     * Deve aceitar um numero de residencia valido.
+     */
     @Test
     public void deve_aceitar_um_numero_de_residencia_valido() {
         endereco.setNumeroResidencia(999);
-        assertTrue(isValid(endereco, endereco.getNumeroResidencia().toString()));
+        assertTrue(isValid(endereco, String.valueOf(endereco.getNumeroResidencia())));
     }
 
+    /**
+     * Deve retornar falso se os enderecos forem diferentes.
+     */
     @Test
     public void deve_retornar_falso_se_os_enderecos_forem_diferentes() {
-        endereco.setCep("08253700");
-        endereco.setComplemento("Apartamento 41B");
-        endereco.setNumeroResidencia(360);
         Endereco endereco2 = Fixture.from(Endereco.class).gimme("EnderecoFixture");
+
         assertFalse(endereco.equals(endereco2));
     }
 
+    /**
+     * Deve retornar verdadeiro se os enderecos forem iguais.
+     */
     @Test
     public void deve_retornar_verdadeiro_se_os_enderecos_forem_iguais() {
-        Endereco endereco2 = Fixture.from(Endereco.class).gimme("EnderecoFixture");
-        endereco2.setCep(endereco.getCep());
-        endereco2.setComplemento(endereco.getComplemento());
-        endereco2.setNumeroResidencia(endereco.getNumeroResidencia());
+        Endereco endereco2 = endereco;
+
         assertTrue(endereco.equals(endereco2));
     }
 
@@ -292,7 +350,7 @@ public class EnderecoTest {
      */
     @Test
     public void deve_respeitar_o_equals() {
-        assertThat(Endereco.class, hasValidBeanEqualsFor("cep", "numeroResidencia", "complemento"));
+        assertThat(Endereco.class, hasValidBeanEqualsFor("cep", "numeroResidencia", "estado"));
     }
 
     /**
@@ -300,7 +358,7 @@ public class EnderecoTest {
      */
     @Test
     public void deve_respeitar_o_hashcode() {
-        assertThat(Endereco.class, hasValidBeanHashCodeFor("cep", "numeroResidencia", "complemento"));
+        assertThat(Endereco.class, hasValidBeanHashCodeFor("cep", "numeroResidencia", "estado"));
     }
 
     /**
@@ -309,10 +367,17 @@ public class EnderecoTest {
     @Test
     public void deve_respeitar_o_toString() {
 
-        endereco.setUf(DDD.SAO_PAULO);
+        endereco.setEstado(DDD.SAO_PAULO);
         assertTrue(endereco.toString().contains("SAO_PAULO"));
     }
 
+    /**
+     * Checks if is valid.
+     *
+     * @param endereco the endereco
+     * @param mensagem the mensagem
+     * @return true, if is valid
+     */
     public boolean isValid(Endereco endereco, String mensagem) {
         validator = factory.getValidator();
         boolean valido = true;

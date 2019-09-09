@@ -26,15 +26,15 @@ public class Endereco {
     @Pattern(regexp = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$", message = "Bairro não pode conter números e caracteres especiais.")
     private String bairro;
 
-    /** The uf. */
+    /** The estado. */
     @NotNull(message = "DDD não pode ser nulo.")
     @Valid
-    private DDD uf;
+    private DDD estado;
 
-    @NotNull(message = "O número da residência não pode ser nulo.")
-    @Min(value = 0, message = "O número da residência não ser negativo.")
+    /** The numero residencia. */
+    @Min(value = 1, message = "O número da residência não ser negativo.")
     @Max(value = 1500, message = "O número da residência não pode ser maior que 1500.")
-    private Integer numeroResidencia;
+    private int numeroResidencia;
 
     /** The cep. */
     @NotBlank(message = "CEP não pode ser nulo e nem vazio.")
@@ -57,8 +57,8 @@ public class Endereco {
     /**
      * Instantiates a new endereco.
      *
-     * @param numeroResidencia the numeroResidencia
      * @param cep the cep
+     * @param numeroResidencia the numeroResidencia
      * @param complemento the complemento
      */
     public Endereco(String cep, Integer numeroResidencia, String complemento) {
@@ -105,21 +105,21 @@ public class Endereco {
     }
 
     /**
-     * Gets the uf.
+     * Gets the estado.
      *
-     * @return the uf
+     * @return the estado
      */
-    public DDD getUf() {
-        return uf;
+    public DDD getEstado() {
+        return estado;
     }
 
     /**
-     * Sets the uf.
+     * Sets the estado.
      *
-     * @param uf the new uf
+     * @param estado the new estado
      */
-    public void setUf(DDD uf) {
-        this.uf = uf;
+    public void setEstado(DDD estado) {
+        this.estado = estado;
     }
 
     /**
@@ -140,11 +140,21 @@ public class Endereco {
         this.cep = cep;
     }
 
-    public Integer getNumeroResidencia() {
+    /**
+     * Gets the numero residencia.
+     *
+     * @return the numero residencia
+     */
+    public int getNumeroResidencia() {
         return numeroResidencia;
     }
 
-    public void setNumeroResidencia(Integer numeroResidencia) {
+    /**
+     * Sets the numero residencia.
+     *
+     * @param numeroResidencia the new numero residencia
+     */
+    public void setNumeroResidencia(int numeroResidencia) {
         this.numeroResidencia = numeroResidencia;
     }
 
@@ -155,7 +165,7 @@ public class Endereco {
      */
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(cep).append(numeroResidencia).append(complemento).hashCode();
+        return new HashCodeBuilder().append(cep).append(numeroResidencia).append(estado).hashCode();
     }
 
     /*
@@ -176,7 +186,7 @@ public class Endereco {
             return false;
         }
         Endereco endereco = (Endereco) obj;
-        return new EqualsBuilder().append(cep, endereco.cep).append(numeroResidencia, endereco.numeroResidencia).append(complemento, endereco.complemento).isEquals();
+        return new EqualsBuilder().append(cep, endereco.cep).append(numeroResidencia, endereco.numeroResidencia).append(estado, endereco.estado).isEquals();
     }
 
     /*

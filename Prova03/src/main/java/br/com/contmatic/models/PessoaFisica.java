@@ -20,12 +20,12 @@ public class PessoaFisica extends Pessoa {
 
     /** The cpf. */
     @NotBlank(message = "CPF obrigatório.")
-    @CPF(message = "CPF deve ser válido.")
+    @CPF(message = "CPF inserido deve ser válido.")
     @Size(min = 11, max = 11, message = "CPF deve conter exatamente 11 caracteres.")
     private String cpf;
 
     /** The sexo. */
-    @NotNull(message = "Sexo obrigatório.")
+    @NotBlank(message = "Sexo obrigatório.")
     @Size(min = 8, max = 9, message = "Sexo deve ter no mínimo 8 caracteres e no máximo 9.")
     @Pattern(regexp = "[A-Z]\\B\\w\\D*", message = "Não pode conter acentos, caracteres especiais e números no sexo.")
     private String sexo;

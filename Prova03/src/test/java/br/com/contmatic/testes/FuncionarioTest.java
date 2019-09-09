@@ -39,7 +39,11 @@ public class FuncionarioTest {
     /** The factory. */
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
+    /** The funcionario. */
     private Funcionario funcionario = Fixture.from(Funcionario.class).gimme("FuncionarioFixture");
+
+    /** The funcionario 2. */
+    private Funcionario funcionario2 = new Funcionario();
 
     /**
      * Sets the up.
@@ -61,15 +65,6 @@ public class FuncionarioTest {
     }
 
     /**
-     * Nao deve aceitar salario nulo.
-     */
-    @Test
-    public void nao_deve_aceitar_salario_nulo() {
-        funcionario.setSalario(null);
-        assertFalse(isValid(funcionario, "Salário é obrigatório."));
-    }
-
-    /**
      * Nao deve conter salarios acima de 9999.
      */
     @Test
@@ -85,15 +80,6 @@ public class FuncionarioTest {
     public void nao_deve_conter_salarios_abaixo_de_1000() {
         funcionario.setSalario(900L);
         assertFalse(isValid(funcionario, "O salário não pode ser menor que a base de R$: 1000.00."));
-    }
-
-    /**
-     * Pode aceitar comissao nula.
-     */
-    @Test
-    public void pode_aceitar_comissao_0() {
-        funcionario.setComissao(0L);
-        assertTrue(isValid(funcionario, funcionario.getComissao().toString()));
     }
 
     /**
@@ -114,6 +100,9 @@ public class FuncionarioTest {
         assertFalse(isValid(funcionario, "A comissão não pode ser menor que R$: 0.00."));
     }
 
+    /**
+     * Nao deve aceitar departamento com caracteres especiais.
+     */
     @Test
     public void nao_deve_aceitar_departamento_com_caracteres_especiais() {
         funcionario.setDepartamento("D&senvolviment#");
@@ -129,24 +118,36 @@ public class FuncionarioTest {
         assertFalse(isValid(funcionario, "Ter um departamento é obrigatório."));
     }
 
+    /**
+     * Nao deve aceitar departamento vazio.
+     */
     @Test
     public void nao_deve_aceitar_departamento_vazio() {
         funcionario.setDepartamento(EMPTY);
         assertFalse(isValid(funcionario, "Ter um departamento é obrigatório."));
     }
 
+    /**
+     * Nao deve aceitar departamento com numeros.
+     */
     @Test
     public void nao_deve_aceitar_departamento_com_numeros() {
         funcionario.setDepartamento(random(20, true, true));
         assertFalse(isValid(funcionario, "A primeira letra deve ser maiuscula e não pode conter acentuação e caracteres especiais."));
     }
 
+    /**
+     * Nao deve aceitar departamento com acentos.
+     */
     @Test
     public void nao_deve_aceitar_departamento_com_acentos() {
         funcionario.setDepartamento("Comunicação");
         assertFalse(isValid(funcionario, "A primeira letra deve ser maiuscula e não pode conter acentuação e caracteres especiais."));
     }
 
+    /**
+     * Deve aceitar um departamento valido.
+     */
     @Test
     public void deve_aceitar_um_departamento_valido() {
         funcionario.setDepartamento("Desenvolvimento");
@@ -167,8 +168,17 @@ public class FuncionarioTest {
      */
     @Test
     public void nao_deve_conter_departamento_com_menos_de_5_caracteres() {
-        funcionario.setDepartamento(random(4));
+        funcionario.setDepartamento(random(4, true, false));
         assertFalse(isValid(funcionario, "O departamento não pode conter menos de 5 e mais de 30 caracteres."));
+    }
+
+    /**
+     * Deve aceitar departamento com ate 30 caracteres.
+     */
+    @Test
+    public void deve_aceitar_departamento_com_ate_30_caracteres() {
+        funcionario.setDepartamento(random(25, true, false));
+        assertTrue(isValid(funcionario, funcionario.getDepartamento()));
     }
 
     /**
@@ -185,7 +195,7 @@ public class FuncionarioTest {
     @Test
     public void deve_respeitar_o_equals() {
         gerarData();
-        assertThat(Funcionario.class, hasValidBeanEqualsFor("comissao","salario","departamento"));
+        assertThat(Funcionario.class, hasValidBeanEqualsFor());
     }
 
     /**
@@ -194,25 +204,27 @@ public class FuncionarioTest {
     @Test
     public void deve_respeitar_o_hashcode() {
         gerarData();
-        assertThat(Funcionario.class, hasValidBeanHashCodeFor("comissao","salario","departamento"));
+        assertThat(Funcionario.class, hasValidBeanHashCodeFor());
     }
 
+    /**
+     * Deve retornar falso se o cpf dos funcionarios forem diferentes.
+     */
     @Test
-    public void deve_retornar_falso_se_os_funcionarios_forem_diferentes() {
-        funcionario.setCpf("65847784015");
-        Funcionario funcionario2 = Fixture.from(Funcionario.class).gimme("FuncionarioFixture");
-        funcionario2.setCpf("28985012045");
+    public void deve_retornar_falso_se_o_cpf_dos_funcionarios_forem_diferentes() {
+        funcionario.setCpf("756.953.220-14");
+        funcionario2.setCpf("781.040.350-88");
         assertFalse(funcionario.equals(funcionario2));
-
     }
 
+    /**
+     * Deve retornar verdadeiro se os funcionarios forem iguais.
+     */
     @Test
     public void deve_retornar_verdadeiro_se_os_funcionarios_forem_iguais() {
-        funcionario.setCpf("28512130083");
-        Funcionario funcionario2 = Fixture.from(Funcionario.class).gimme("FuncionarioFixture");
-        funcionario2.setCpf("28512130083");
+        funcionario.setCpf("070.678.110-40");
+        funcionario2.setCpf("070.678.110-40");
         assertTrue(funcionario.equals(funcionario2));
-
     }
 
     /**
@@ -220,10 +232,17 @@ public class FuncionarioTest {
      */
     @Test
     public void deve_respeitar_o_toString() {
-        Funcionario funcionario = Fixture.from(Funcionario.class).gimme("FuncionarioFixture");
+        funcionario.setDepartamento("Desenvolvimento");
         assertTrue(funcionario.toString().contains("Desenvolvimento"));
     }
 
+    /**
+     * Checks if is valid.
+     *
+     * @param funcionario the funcionario
+     * @param mensagem the mensagem
+     * @return true, if is valid
+     */
     public boolean isValid(Funcionario funcionario, String mensagem) {
         validator = factory.getValidator();
         boolean valido = true;

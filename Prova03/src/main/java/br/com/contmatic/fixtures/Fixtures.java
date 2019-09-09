@@ -56,9 +56,10 @@ public class Fixtures {
         Fixture.of(Endereco.class).addTemplate("EnderecoFixture", new Rule() {
             {
                 add("bairro", random("Itaquera", "Tatuape", "Ipiranga", "Cangaiba"));
-                add("uf", DDD.values()[new Random().nextInt(DDD.values().length - 1)]);
+                add("estado", DDD.values()[new Random().nextInt(DDD.values().length - 1)]);
+                add("numeroResidencia",  random(Integer.class, range(1, 1000)));
                 add("cep", random("13183-010", "78075-705", "79822-040", "29175-652"));
-                add("complemento", random("Apartamento 33-A", "Casa 03"));
+                add("complemento", random("Apartamento 33A", "Casa 03"));
             }
         });
     }

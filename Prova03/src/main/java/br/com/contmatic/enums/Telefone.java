@@ -2,6 +2,8 @@ package br.com.contmatic.enums;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -15,11 +17,13 @@ public enum Telefone {
                       FIXO("Fixo", 8);
 
     /** The descricao. */
-    @Size(max = 30, message = "A descrição não pode ter mais de 30 caracteres.")
+    @NotBlank(message = "A descrição não pode ser nula ou vazia.")
+    @Size(min = 15, max = 30, message = "A descrição não pode ter menos de 15 e mais de 30 caracteres.")
+    @Pattern(regexp = "[A-Z]\\BB\\w\\D", message = "A descrição não pode conter acentos, caracteres especiais e números.")
     private String descricao;
 
     /** The tamanho. */
-    @Min(value = 8, message = "O tamanho do telefone não pode ser menor que 9.")
+    @Min(value = 8, message = "O tamanho do telefone não pode ser menor que 8.")
     @Max(value = 9, message = "O tamanho do telefone não pode ser maior que 9.")
     private int tamanho;
 
