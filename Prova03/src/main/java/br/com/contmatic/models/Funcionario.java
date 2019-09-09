@@ -2,11 +2,16 @@ package br.com.contmatic.models;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-// TODO: Auto-generated Javadoc
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * The Class Funcionario.
  */
@@ -15,18 +20,18 @@ public class Funcionario extends PessoaFisica {
     /** The salario. */
     @NotNull(message = "Salário é obrigatório.")
     @DecimalMin(value = "1000.00", message = "O salário não pode ser menor que a base de R$: 1000.00.")
-    @DecimalMax(value = "9999.99", message = "O salário não pode ser maior que R$: 9999.99.")
-    private Short salario;
+    @DecimalMax(value = "8500.00", message = "O salário não pode ser maior que R$: 8500.00.")
+    private long salario;
 
     /** The comissao. */
     @DecimalMin(value = "0.0", message = "A comissão não pode ser menor que R$: 0.00.")
     @DecimalMax(value = "500.00", message = "A comissão não pode ser maior que R$: 500.00.")
-    @Pattern(regexp = "^([a-zA-Z])+$")
-    private Short comissao;
+    private long comissao;
 
     /** The departamento. */
-    @NotNull(message = "Ter um departamento é obrigatório.")
-    @Size(min = 10, max = 30)
+    @NotBlank(message = "Ter um departamento é obrigatório.")
+    @Size(min = 5, max = 30, message = "O departamento não pode conter menos de 5 e mais de 30 caracteres.")
+    @Pattern(regexp = "([A-Z]\\B)([a-zA-Z])+$", message = "A primeira letra deve ser maiuscula e não pode conter acentuação e caracteres especiais.")
     private String departamento;
 
     /**
@@ -43,10 +48,10 @@ public class Funcionario extends PessoaFisica {
      * @param comissao the comissao
      * @param departamento the departamento
      */
-    public Funcionario(Short salario, Short comissao, String departamento) {
+    public Funcionario(long salario, long comissao, String departamento) {
         super();
-        this.salario = salario;
         this.comissao = comissao;
+        this.salario = salario;
         this.departamento = departamento;
     }
 
@@ -56,7 +61,7 @@ public class Funcionario extends PessoaFisica {
      * @return the salario
      */
 
-    public Short getSalario() {
+    public long getSalario() {
         return salario;
     }
 
@@ -65,7 +70,7 @@ public class Funcionario extends PessoaFisica {
      *
      * @param salario the new salario
      */
-    public void setSalario(Short salario) {
+    public void setSalario(long salario) {
         this.salario = salario;
     }
 
@@ -74,7 +79,7 @@ public class Funcionario extends PessoaFisica {
      *
      * @return the comissao
      */
-    public Short getComissao() {
+    public long getComissao() {
         return comissao;
     }
 
@@ -83,7 +88,7 @@ public class Funcionario extends PessoaFisica {
      *
      * @param comissao the new comissao
      */
-    public void setComissao(Short comissao) {
+    public void setComissao(long comissao) {
         this.comissao = comissao;
     }
 
@@ -103,6 +108,50 @@ public class Funcionario extends PessoaFisica {
      */
     public void setDepartamento(String departamento) {
         this.departamento = departamento;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+
+        return new HashCodeBuilder().appendSuper(super.hashCode()).toHashCode();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        Funcionario funcionario = (Funcionario) obj;
+        return new EqualsBuilder().append(super.getCpf(), funcionario.getCpf()).isEquals();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+
     }
 
 }

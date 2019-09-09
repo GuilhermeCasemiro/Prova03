@@ -2,7 +2,8 @@ U:\git\Prova03\Prova03\src\main\java\br\com\contmatic\models\Contato.java
 U:\git\Prova03\Prova03\src\main\java\br\com\contmatic\models\PessoaFisica.java
 U:\git\Prova03\Prova03\src\main\java\br\com\contmatic\enums\DDD.java
 U:\git\Prova03\Prova03\src\main\java\br\com\contmatic\enums\Telefone.java
+U:\git\Prova03\Prova03\src\main\java\br\com\contmatic\models\Empresa.java
 U:\git\Prova03\Prova03\src\main\java\br\com\contmatic\models\Endereco.java
-U:\git\Prova03\Prova03\src\main\java\br\com\contmatic\models\PessoaJuridica.java
+U:\git\Prova03\Prova03\src\main\java\br\com\contmatic\models\Funcionario.java
 U:\git\Prova03\Prova03\src\main\java\br\com\contmatic\models\Pessoa.java
 U:\git\Prova03\Prova03\src\main\java\br\com\contmatic\fixtures\Fixtures.java

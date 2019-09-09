@@ -1,30 +1,42 @@
 package br.com.contmatic.testes;
 
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
-import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEquals;
-import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCode;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.lessThan;
-import static org.junit.Assert.assertNotNull;
+import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEqualsFor;
+import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCodeFor;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import br.com.contmatic.enums.DDD;
 import br.com.contmatic.enums.Telefone;
 import br.com.contmatic.fixtures.Fixtures;
 import br.com.contmatic.models.Contato;
 import br.com.six2six.fixturefactory.Fixture;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ContatoTest.
  */
 public class ContatoTest {
+
+    /** The validator. */
+    private Validator validator;
+
+    /** The factory. */
+    private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+
+    private Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
+
+    private Contato contato2 = new Contato();
 
     /**
      * Sets the up.
@@ -39,26 +51,20 @@ public class ContatoTest {
      */
     @Test
     public void nao_deve_aceitar_telefone_nulo() {
-        Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
-        assertNotNull(contato.getTelefone());
+        contato.setTelefone(null);
+        assertFalse(isValid(contato, "Telefone não pode ser nulo."));
     }
 
-    /**
-     * Nao deve aceitar telefone fixo com mais de 8 digitos.
-     */
     @Test
-    public void nao_deve_aceitar_telefone_fixo_com_mais_de_8_digitos() {
-        Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
-        assertThat(contato.getTelefone().getTamanho(), is(not(greaterThan((9)))));
+    public void deve_aceitar_um_telefone_celular_valido() {
+        contato.setTelefone(Telefone.CELULAR);
+        assertTrue(isValid(contato, Telefone.CELULAR.toString()));
     }
 
-    /**
-     * Nao deve aceitar telefone celular com mais de 9 digitos.
-     */
     @Test
-    public void nao_deve_aceitar_telefone_celular_com_mais_de_9_digitos() {
-        Contato contato = Fixture.from(Contato.class).gimme("ContatoCelularFixture");
-        assertThat(contato.getTelefone().getTamanho(), is(not(greaterThan((10)))));
+    public void deve_aceitar_um_telefone_fixo_valido() {
+        contato.setTelefone(Telefone.FIXO);
+        assertTrue(isValid(contato, Telefone.FIXO.toString()));
     }
 
     /**
@@ -66,35 +72,14 @@ public class ContatoTest {
      */
     @Test
     public void nao_deve_conter_ddd_nulo() {
-        Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
-        assertNotNull(contato.getDdd());
+        contato.setDdd(null);
+        assertFalse(isValid(contato, "DDD não pode ser nulo."));
     }
 
-    /**
-     * Nao deve conter ddd com mais de 2 caracteres.
-     */
     @Test
-    public void nao_deve_conter_ddd_com_mais_de_2_caracteres() {
-        Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
-        assertThat(contato.getDdd().getDDD().length(), is(not(greaterThan((3)))));
-    }
-
-    /**
-     * Nao deve conter ddd com menos de 2 caracteres.
-     */
-    @Test
-    public void nao_deve_conter_ddd_com_menos_de_2_caracteres() {
-        Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
-        assertThat(contato.getDdd().getDDD().length(), is(not(lessThan((1)))));
-    }
-
-    /**
-     * Deve conter ddd igual a 2 caracteres.
-     */
-    @Test
-    public void deve_conter_ddd_igual_a_2_caracteres() {
-        Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
-        assertThat(contato.getDdd().getDDD().length(), is(equalTo(2)));
+    public void deve_aceitar_um_ddd_valido() {
+        contato.setDdd(DDD.SAO_PAULO);
+        assertTrue(isValid(contato, DDD.SAO_PAULO.toString()));
     }
 
     /**
@@ -110,7 +95,7 @@ public class ContatoTest {
      */
     @Test
     public void deve_respeitar_o_equals() {
-        assertThat(Contato.class, hasValidBeanEquals());
+        assertThat(Contato.class, hasValidBeanEqualsFor("telefone", "ddd"));
     }
 
     /**
@@ -118,7 +103,27 @@ public class ContatoTest {
      */
     @Test
     public void deve_respeitar_o_hashcode() {
-        assertThat(Contato.class, hasValidBeanHashCode());
+        assertThat(Contato.class, hasValidBeanHashCodeFor("telefone", "ddd"));
+    }
+
+    @Test
+    public void deve_retornar_falso_se_os_contatos_forem_diferentes() {
+        contato.setDdd(DDD.AMAPA);
+        contato.setTelefone(Telefone.CELULAR);
+
+        contato2.setDdd(DDD.BAHIA);
+        contato2.setTelefone(Telefone.FIXO);
+        assertFalse(contato.equals(contato2));
+    }
+
+    @Test
+    public void deve_retornar_verdadeiro_se_os_contatos_forem_iguais() {
+        contato.setDdd(DDD.AMAPA);
+        contato.setTelefone(Telefone.CELULAR);
+
+        contato2.setDdd(DDD.AMAPA);
+        contato2.setTelefone(Telefone.CELULAR);
+        assertTrue(contato.equals(contato2));
     }
 
     /**
@@ -129,6 +134,17 @@ public class ContatoTest {
         Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
         contato.setTelefone(Telefone.FIXO);
         assertTrue(contato.toString().contains("FIXO"));
+    }
+
+    public boolean isValid(Contato contato, String mensagem) {
+        validator = factory.getValidator();
+        boolean valido = true;
+        Set<ConstraintViolation<Contato>> restricoes = validator.validate(contato);
+        for(ConstraintViolation<Contato> constraintViolation : restricoes)
+            if (constraintViolation.getMessage().equalsIgnoreCase(mensagem))
+                valido = false;
+
+        return valido;
     }
 
 }
