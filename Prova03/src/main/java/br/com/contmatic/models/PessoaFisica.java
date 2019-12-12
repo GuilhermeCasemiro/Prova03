@@ -16,7 +16,7 @@ import org.joda.time.DateTime;
 /**
  * The Class PessoaFisica.
  */
-public class PessoaFisica extends Pessoa {
+public class PessoaFisica{
 
     /** The cpf. */
     @NotBlank(message = "CPF obrigatório.")

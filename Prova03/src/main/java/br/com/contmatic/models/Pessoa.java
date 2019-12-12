@@ -224,8 +224,7 @@ public class Pessoa {
     @Override
     public String toString() {
 
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append("Nome: ", nome).append("E-mail: ", email).append("Contatos: ", contatos).append("Endereços: ", endereco).toString();
 
     }
-
 }

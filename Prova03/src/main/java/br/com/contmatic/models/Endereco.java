@@ -13,8 +13,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import br.com.contmatic.enums.DDD;
-
 /**
  * The Class Endereco.
  */
@@ -27,9 +25,9 @@ public class Endereco {
     private String bairro;
 
     /** The estado. */
-    @NotNull(message = "DDD não pode ser nulo.")
+    @NotNull(message = "Estado não pode ser nulo.")
     @Valid
-    private DDD estado;
+    private Estado estado;
 
     /** The numero residencia. */
     @Min(value = 1, message = "O número da residência não ser negativo.")
@@ -109,7 +107,7 @@ public class Endereco {
      *
      * @return the estado
      */
-    public DDD getEstado() {
+    public Estado getEstado() {
         return estado;
     }
 
@@ -118,7 +116,7 @@ public class Endereco {
      *
      * @param estado the new estado
      */
-    public void setEstado(DDD estado) {
+    public void setEstado(Estado estado) {
         this.estado = estado;
     }
 
@@ -165,7 +163,7 @@ public class Endereco {
      */
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(cep).append(numeroResidencia).append(estado).hashCode();
+        return new HashCodeBuilder().append(cep).toHashCode();
     }
 
     /*
@@ -186,7 +184,7 @@ public class Endereco {
             return false;
         }
         Endereco endereco = (Endereco) obj;
-        return new EqualsBuilder().append(cep, endereco.cep).append(numeroResidencia, endereco.numeroResidencia).append(estado, endereco.estado).isEquals();
+        return new EqualsBuilder().append(cep, endereco.cep).isEquals();
     }
 
     /*

@@ -14,7 +14,7 @@ import br.com.caelum.stella.bean.validation.CNPJ;
 /**
  * The Class PessoaJuridica.
  */
-public class Empresa extends Pessoa {
+public class Empresa{
 
     /** The cnpj. */
     @NotBlank(message = "CNPJ obrigatório.")

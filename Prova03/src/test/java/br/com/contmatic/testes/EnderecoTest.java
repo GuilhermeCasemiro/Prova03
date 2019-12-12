@@ -1,5 +1,6 @@
 package br.com.contmatic.testes;
 
+import static br.com.contmatic.easy.random.EnderecoRandom.gerarEndereco;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEqualsFor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCodeFor;
@@ -17,19 +18,16 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import br.com.contmatic.enums.DDD;
-import br.com.contmatic.fixtures.Fixtures;
 import br.com.contmatic.models.Endereco;
-import br.com.six2six.fixturefactory.Fixture;
+import br.com.contmatic.models.Estado;
 
 /**
  * The Class EnderecoTest.
  */
 public class EnderecoTest {
-    
+
     /** The validator. */
     private Validator validator;
 
@@ -37,15 +35,10 @@ public class EnderecoTest {
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
     /** The endereco. */
-    Endereco endereco = Fixture.from(Endereco.class).gimme("EnderecoFixture");
+    Endereco endereco = gerarEndereco();
 
-    /**
-     * Sets the up.
-     */
-    @BeforeClass
-    public static void setUp() {
-        Fixtures.setUp();
-    }
+    Estado estado = new Estado();
+
     /* Testes para o bairro */
 
     /**
@@ -135,18 +128,18 @@ public class EnderecoTest {
      * Nao deve conter uf nulo.
      */
     @Test
-    public void nao_deve_conter_uf_nulo() {
+    public void nao_deve_conter_estado_nulo() {
         endereco.setEstado(null);
-        assertFalse(isValid(endereco, "DDD não pode ser nulo."));
+        assertFalse(isValid(endereco, "Estado não pode ser nulo."));
     }
 
     /**
      * Deve aceitar um ddd valido.
      */
     @Test
-    public void deve_aceitar_um_ddd_valido() {
-        endereco.setEstado(DDD.SAO_PAULO);
-        assertTrue(isValid(endereco, DDD.SAO_PAULO.getDDD()));
+    public void deve_aceitar_um_estado_valido() {
+        endereco.setEstado(estado);
+        assertTrue(isValid(endereco, estado.getNome()));
     }
     /* Testes do CEP */
 
@@ -314,7 +307,7 @@ public class EnderecoTest {
      */
     @Test
     public void deve_retornar_falso_se_os_enderecos_forem_diferentes() {
-        Endereco endereco2 = Fixture.from(Endereco.class).gimme("EnderecoFixture");
+        Endereco endereco2 = gerarEndereco();
 
         assertFalse(endereco.equals(endereco2));
     }
@@ -350,7 +343,7 @@ public class EnderecoTest {
      */
     @Test
     public void deve_respeitar_o_equals() {
-        assertThat(Endereco.class, hasValidBeanEqualsFor("cep", "numeroResidencia", "estado"));
+        assertThat(Endereco.class, hasValidBeanEqualsFor("cep"));
     }
 
     /**
@@ -358,7 +351,7 @@ public class EnderecoTest {
      */
     @Test
     public void deve_respeitar_o_hashcode() {
-        assertThat(Endereco.class, hasValidBeanHashCodeFor("cep", "numeroResidencia", "estado"));
+        assertThat(Endereco.class, hasValidBeanHashCodeFor("cep"));
     }
 
     /**
@@ -366,9 +359,9 @@ public class EnderecoTest {
      */
     @Test
     public void deve_respeitar_o_toString() {
-
-        endereco.setEstado(DDD.SAO_PAULO);
-        assertTrue(endereco.toString().contains("SAO_PAULO"));
+        estado.setNome("São Paulo");
+        endereco.setEstado(estado);
+        assertTrue(endereco.toString().contains("São Paulo"));
     }
 
     /**

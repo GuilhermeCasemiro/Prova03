@@ -1,5 +1,6 @@
 package br.com.contmatic.testes;
 
+import static br.com.contmatic.easy.random.FuncionarioRandom.gerarFuncionario;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEqualsFor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCodeFor;
@@ -19,14 +20,11 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.joda.time.DateTime;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.google.code.beanmatchers.ValueGenerator;
 
-import br.com.contmatic.fixtures.Fixtures;
 import br.com.contmatic.models.Funcionario;
-import br.com.six2six.fixturefactory.Fixture;
 
 /**
  * The Class FuncionarioTest.
@@ -40,18 +38,10 @@ public class FuncionarioTest {
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
     /** The funcionario. */
-    private Funcionario funcionario = Fixture.from(Funcionario.class).gimme("FuncionarioFixture");
+    private Funcionario funcionario = gerarFuncionario();
 
     /** The funcionario 2. */
     private Funcionario funcionario2 = new Funcionario();
-
-    /**
-     * Sets the up.
-     */
-    @BeforeClass
-    public static void setUp() {
-        Fixtures.setUp();
-    }
 
     /**
      * Gerar data.

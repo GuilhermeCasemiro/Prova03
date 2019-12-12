@@ -1,5 +1,6 @@
 package br.com.contmatic.testes;
 
+import static br.com.contmatic.easy.random.ContatoRandom.gerarContato;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEqualsFor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCodeFor;
@@ -14,14 +15,11 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import br.com.contmatic.enums.DDD;
 import br.com.contmatic.enums.Telefone;
-import br.com.contmatic.fixtures.Fixtures;
 import br.com.contmatic.models.Contato;
-import br.com.six2six.fixturefactory.Fixture;
 
 /**
  * The Class ContatoTest.
@@ -34,17 +32,9 @@ public class ContatoTest {
     /** The factory. */
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
-    private Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
+    private Contato contato = gerarContato();
 
     private Contato contato2 = new Contato();
-
-    /**
-     * Sets the up.
-     */
-    @BeforeClass()
-    public static void setUp() {
-        Fixtures.setUp();
-    }
 
     /**
      * Nao deve aceitar telefone nulo.
@@ -131,7 +121,7 @@ public class ContatoTest {
      */
     @Test
     public void deve_respeitar_o_toString() {
-        Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
+        Contato contato = gerarContato();
         contato.setTelefone(Telefone.FIXO);
         assertTrue(contato.toString().contains("FIXO"));
     }

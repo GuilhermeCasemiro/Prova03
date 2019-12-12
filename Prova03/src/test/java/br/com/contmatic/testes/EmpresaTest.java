@@ -1,5 +1,6 @@
 package br.com.contmatic.testes;
 
+import static br.com.contmatic.easy.random.EmpresaRandom.gerarEmpresa;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEqualsFor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCodeFor;
@@ -17,12 +18,9 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import br.com.contmatic.fixtures.Fixtures;
 import br.com.contmatic.models.Empresa;
-import br.com.six2six.fixturefactory.Fixture;
 
 /**
  * The Class EmpresaTest.
@@ -36,18 +34,11 @@ public class EmpresaTest {
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
     /** The empresa. */
-    private Empresa empresa = Fixture.from(Empresa.class).gimme("EmpresaFixture");
+    private Empresa empresa = gerarEmpresa();
 
     /** The empresa 2. */
     Empresa empresa2 = new Empresa();
 
-    /**
-     * Sets the up.
-     */
-    @BeforeClass
-    public static void setUp() {
-        Fixtures.setUp();
-    }
     /* Testes do CNPJ */
 
     /**

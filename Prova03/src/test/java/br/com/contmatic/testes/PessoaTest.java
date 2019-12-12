@@ -1,5 +1,8 @@
 package br.com.contmatic.testes;
 
+import static br.com.contmatic.easy.random.ContatoRandom.gerarContato;
+import static br.com.contmatic.easy.random.EnderecoRandom.gerarEndereco;
+import static br.com.contmatic.easy.random.PessoaRandom.gerarPessoa;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEqualsFor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCodeFor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidGettersAndSetters;
@@ -17,14 +20,11 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import br.com.contmatic.fixtures.Fixtures;
 import br.com.contmatic.models.Contato;
 import br.com.contmatic.models.Endereco;
 import br.com.contmatic.models.Pessoa;
-import br.com.six2six.fixturefactory.Fixture;
 
 /**
  * The Class PessoaTest.
@@ -38,24 +38,16 @@ public class PessoaTest {
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
     /** The pessoa. */
-    private Pessoa pessoa = Fixture.from(Pessoa.class).gimme("PessoaFixture");
+    private Pessoa pessoa = gerarPessoa();
 
     /** The pessoa 2. */
-    private Pessoa pessoa2 = Fixture.from(Pessoa.class).gimme("PessoaFixture");
+    private Pessoa pessoa2 = gerarPessoa();
 
     /** The contato. */
-    private Contato contato = Fixture.from(Contato.class).gimme("ContatoFixoFixture");
+    private Contato contato = gerarContato();
 
     /** The endereco. */
-    private Endereco endereco = Fixture.from(Endereco.class).gimme("EnderecoFixture");
-
-    /**
-     * Sets the up.
-     */
-    @BeforeClass
-    public static void setUp() {
-        Fixtures.setUp();
-    }
+    private Endereco endereco = gerarEndereco();
 
     /* Testes do Nome */
 
@@ -238,7 +230,7 @@ public class PessoaTest {
     @Test
     public void deve_retornar_verdadeiro_se_o_endereco_for_valido() {
 
-        Endereco endereco = Fixture.from(Endereco.class).gimme("EnderecoFixture");
+        Endereco endereco = gerarEndereco();
         assertTrue(pessoa.acicionarEndereco(endereco));
     }
 
@@ -289,7 +281,7 @@ public class PessoaTest {
      */
     @Test
     public void deve_aceitar_2_contatos_diferentes() {
-        Contato contato2 = Fixture.from(Contato.class).gimme("ContatoCelularFixture");
+        Contato contato2 = gerarContato();
 
         pessoa.getContatos().clear();
         pessoa.acicionarContato(contato);
@@ -316,7 +308,7 @@ public class PessoaTest {
      */
     @Test
     public void deve_aceitar_2_enderecos_diferentes() {
-        Endereco endereco2 = Fixture.from(Endereco.class).gimme("EnderecoFixture");
+        Endereco endereco2 = gerarEndereco();
         pessoa.getEndereco().clear();
         pessoa.acicionarEndereco(endereco);
         pessoa.acicionarEndereco(endereco2);

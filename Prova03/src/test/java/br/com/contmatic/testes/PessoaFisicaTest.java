@@ -1,5 +1,6 @@
 package br.com.contmatic.testes;
 
+import static br.com.contmatic.easy.random.PessoaFisicaRandom.gerarPessoaFisica;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEqualsFor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCodeFor;
@@ -20,14 +21,12 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.joda.time.DateTime;
-import org.junit.BeforeClass;
+import org.joda.time.IllegalFieldValueException;
 import org.junit.Test;
 
 import com.google.code.beanmatchers.ValueGenerator;
 
-import br.com.contmatic.fixtures.Fixtures;
 import br.com.contmatic.models.PessoaFisica;
-import br.com.six2six.fixturefactory.Fixture;
 
 /**
  * The Class PessoaFisicaTest.
@@ -41,18 +40,10 @@ public class PessoaFisicaTest {
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 
     /** The pessoa F. */
-    PessoaFisica pessoaF = Fixture.from(PessoaFisica.class).gimme("PFisicaFixtureMasculino");
+    PessoaFisica pessoaF = gerarPessoaFisica();
 
     /** The pessoa fisica. */
     PessoaFisica pessoaFisica = new PessoaFisica();
-
-    /**
-     * Sets the up.
-     */
-    @BeforeClass
-    public static void setUp() {
-        Fixtures.setUp();
-    }
 
     /**
      * Gerar data.
@@ -153,6 +144,11 @@ public class PessoaFisicaTest {
     public void deve_aceitar_uma_data_de_nascimento_valida() {
         pessoaF.setDataNascimento(new DateTime(2019, 10, 25, 14, 30));
         assertTrue(isValid(pessoaF, pessoaF.getDataNascimento().toString()));
+    }
+
+    @Test(expected = IllegalFieldValueException.class)
+    public void nao_deve_aceitar_data_de_nascimento_invalida() {
+        pessoaF.setDataNascimento(new DateTime(2019, 10, 32, 14, 30));
     }
 
     /**
@@ -282,8 +278,8 @@ public class PessoaFisicaTest {
      */
     @Test
     public void deve_aceitar_as_regras_do_toString() {
-        PessoaFisica pfFsica = Fixture.from(PessoaFisica.class).gimme("PFisicaFixtureMasculino");
-        assertTrue(pfFsica.toString().contains("Masculino"));
+        PessoaFisica pfFsica = gerarPessoaFisica();
+        assertTrue(pfFsica.toString().contains(pfFsica.getCpf()));
     }
 
     /**
